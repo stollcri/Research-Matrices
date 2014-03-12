@@ -18,13 +18,34 @@ class Image:
 
 def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, width, height, depth):
 	matrixScopy = matrixS.copy()
-	i = 0
-	for t in numpy.nditer(matrixScopy, op_flags=['readwrite']):
-		if i < kmin or i >= kmax:
-			t[...] = 0
-		i += 1
-
+	if kmax > 0:
+		i = 0
+		for t in numpy.nditer(matrixScopy, op_flags=['readwrite']):
+			if i < kmin or i >= kmax:
+				t[...] = 0
+			i += 1
+	else:
+		for t in numpy.nditer(matrixScopy, op_flags=['readwrite']):
+			if round(t, 14) <= 0:
+				t[...] = 0
+	
 	A = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
+
+	curMin = 0
+	curMax = 0
+	for n in numpy.nditer(A):
+		if int(round(n)) < curMin:
+			curMin = int(round(n))
+		if int(round(n)) > curMax:
+			curMax = int(round(n))
+	if curMax < 255 and curMin < 0:
+		shiftVal = 255 - curMax
+		for t in numpy.nditer(A, op_flags=['readwrite']):
+			t[...] = t + shiftVal
+			if t > 255:
+				t[...] = 255
+			elif t < 0:
+				t[...] = 0
 
 	f = open(filename, 'w')
 	f.write('P2\n')
@@ -63,8 +84,6 @@ def read_matrix_from_file():
 				if col >= len(image.matrix[row]):
 					row += 1
 					col = 0
-
-				#print row, col, value
 				image.matrix[row][col] = value
 				col += 1
 	return image
@@ -75,11 +94,11 @@ def process_file():
 
 	M = numpy.asmatrix(image.matrix)
 	U, s, Vt = numpy.linalg.svd(M, full_matrices=True)
-
+	
+	write_matrices_to_file(U, s, Vt, 0, 0, 'out/a_0-0.pgm', image.width, image.height, image.depth)
 	write_matrices_to_file(U, s, Vt, 0, 2, 'out/a_0-2.pgm', image.width, image.height, image.depth)
 	write_matrices_to_file(U, s, Vt, 0, 4, 'out/a_0-4.pgm', image.width, image.height, image.depth)
 	write_matrices_to_file(U, s, Vt, 1, 3, 'out/a_1-3.pgm', image.width, image.height, image.depth)
-	write_matrices_to_file(U, s, Vt, 1, 5, 'out/a_1-5.pgm', image.width, image.height, image.depth)
 
 
 if __name__ == "__main__":
