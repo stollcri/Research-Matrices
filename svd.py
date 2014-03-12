@@ -131,7 +131,7 @@ def read_matrix_from_file(file_handle):
 	return image
 	
 
-def process_svd(source_file, destination_file, kmin, kmax):
+def process_svd(source_file, destination_file, kmin, kmax, rescale):
 	"""
 	Read from file provided on the command line or from stdin
 	then save uncompressed representations of the SVD compressed version
@@ -153,4 +153,7 @@ if __name__ == "__main__":
 	parser.add_argument("-k", "--kmax", help="The number k values to use", type=int, default=0)
 	parser.add_argument("-s", "--scale", help="Fit resulting image depth into '0 < n < depth' bounds", action="store_true")
 	args = parser.parse_args()
-	process_svd(args.infile, args.outfile, args.kmin, args.kmax)
+	try:
+		process_svd(args.infile, args.outfile, args.kmin, args.kmax, args.scale)
+	except KeyboardInterrupt:
+		exit(0)
