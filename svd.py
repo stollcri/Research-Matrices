@@ -52,7 +52,7 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, file_handle, 
 	# recompose the trimmed SVD matrices back into matrix A
 	A = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
 
-	# attempt the handle out of range values
+	# attempt the handle out of range values (TODO: pull out to own function)
 	if rescale:
 		curMin = 0
 		curMax = 0
