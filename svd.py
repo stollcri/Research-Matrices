@@ -140,7 +140,7 @@ def process_svd(source_file, destination_file, kmin, kmax, rescale):
 	M = numpy.asmatrix(image.matrix)
 	U, s, Vt = numpy.linalg.svd(M, full_matrices=True)
 	
-	write_matrices_to_file(U, s, Vt, kmin, kmax, destination_file, image.width, image.height, image.depth)
+	write_matrices_to_file(U, s, Vt, kmin, kmax, destination_file, image.width, image.height, image.depth, rescale)
 
 
 
