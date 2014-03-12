@@ -1,7 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import sys, fileinput, numpy
+import sys
+import argparse
+import fileinput
+import numpy
 
 class Image:
 	def __init__(self, matrix=[[]], width=0, height=0, depth=0):
