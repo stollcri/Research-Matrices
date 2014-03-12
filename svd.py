@@ -3,7 +3,6 @@
 
 import sys
 import argparse
-import fileinput
 import numpy
 
 class Image:
@@ -153,6 +152,7 @@ if __name__ == "__main__":
 	parser.add_argument("-k", "--kmax", help="The number k values to use", type=int, default=0)
 	parser.add_argument("-s", "--scale", help="Fit resulting image depth into '0 < n < depth' bounds", action="store_true")
 	args = parser.parse_args()
+
 	try:
 		process_svd(args.infile, args.outfile, args.kmin, args.kmax, args.scale)
 	except KeyboardInterrupt:
