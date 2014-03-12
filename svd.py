@@ -17,18 +17,36 @@ class Image:
 
 
 def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, width, height, depth, rescale=False):
+	"""
+	Write a decomposed matrix to file uncompressed as it would show compressed
+
+	Keyword Arguments:
+	matrixU -- the U portion of the SVD
+	matrixS -- the S (sigma) portion of the SVD
+	matrixVt -- the V transpose portion of the SVD
+	kmin -- the minimum k value to use for compresion (ignored if kmax = 0)
+	kmax -- the maximum kvalue to use for compresion (find optimal if zero)
+	filename -- the file to write to (stdout if blank)
+	width -- the image width
+	height -- the image height
+	depth -- the maximum grey scale value (normally 255)
+	rescale -- True to shift resulting image into 0 < n < depth bounds
+	"""
 	matrixScopy = matrixS.copy()
+	# when kmax is not 0 use the provided kmax
 	if kmax > 0:
 		i = 0
 		for t in numpy.nditer(matrixScopy, op_flags=['readwrite']):
 			if i < kmin or i >= kmax:
 				t[...] = 0
 			i += 1
+	# when kmax is 0 then drop eigen values less than 1.0E-14
 	else:
 		for t in numpy.nditer(matrixScopy, op_flags=['readwrite']):
 			if round(t, 14) <= 0:
 				t[...] = 0
 	
+	# recompose the trimmed SVD matrices back into matrix A
 	A = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
 
 	# attempt the handle out of range values
@@ -93,6 +111,9 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, wid
 
 
 def read_matrix_from_file():
+	"""
+	Read an ASCII PGM file and create an Image object from it
+	"""
 	row = 0
 	col = 0
 	image = Image()
@@ -119,6 +140,10 @@ def read_matrix_from_file():
 	
 
 def process_file():
+	"""
+	Read from file provided on the command line or from stdin
+	then save uncompressed representations of the SVD compressed version
+	"""
 	image = read_matrix_from_file()
 
 	M = numpy.asmatrix(image.matrix)
