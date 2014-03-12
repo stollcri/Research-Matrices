@@ -38,6 +38,7 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, wid
 	for n in numpy.nditer(A):
 		f.write(str(int(round(n))))
 		f.write(' ')
+	f.write('\n')
 	f.close()
 
 
@@ -75,10 +76,10 @@ def process_file():
 	M = numpy.asmatrix(image.matrix)
 	U, s, Vt = numpy.linalg.svd(M, full_matrices=True)
 
-	write_matrices_to_file(U, s, Vt, 0, 2, 'a_out_0-2.pgm', image.width, image.height, image.depth)
-	write_matrices_to_file(U, s, Vt, 0, 4, 'a_out_0-4.pgm', image.width, image.height, image.depth)
-	write_matrices_to_file(U, s, Vt, 1, 3, 'a_out_1-3.pgm', image.width, image.height, image.depth)
-	write_matrices_to_file(U, s, Vt, 1, 5, 'a_out_1-5.pgm', image.width, image.height, image.depth)
+	write_matrices_to_file(U, s, Vt, 0, 2, 'out/a_0-2.pgm', image.width, image.height, image.depth)
+	write_matrices_to_file(U, s, Vt, 0, 4, 'out/a_0-4.pgm', image.width, image.height, image.depth)
+	write_matrices_to_file(U, s, Vt, 1, 3, 'out/a_1-3.pgm', image.width, image.height, image.depth)
+	write_matrices_to_file(U, s, Vt, 1, 5, 'out/a_1-5.pgm', image.width, image.height, image.depth)
 
 
 if __name__ == "__main__":
