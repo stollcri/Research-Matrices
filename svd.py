@@ -16,7 +16,7 @@ class Image:
 		self.matrix = [[0 for j in xrange(height)] for i in xrange(width)]
 
 
-def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, width, height, depth):
+def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, width, height, depth, rescale=False):
 	matrixScopy = matrixS.copy()
 	if kmax > 0:
 		i = 0
@@ -31,21 +31,41 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, wid
 	
 	A = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
 
-	curMin = 0
-	curMax = 0
-	for n in numpy.nditer(A):
-		if int(round(n)) < curMin:
-			curMin = int(round(n))
-		if int(round(n)) > curMax:
-			curMax = int(round(n))
-	if curMax < 255 and curMin < 0:
-		shiftVal = 255 - curMax
-		for t in numpy.nditer(A, op_flags=['readwrite']):
-			t[...] = t + shiftVal
-			if t > 255:
-				t[...] = 255
-			elif t < 0:
-				t[...] = 0
+	# attempt the handle out of range values
+	if rescale:
+		curMin = 0
+		curMax = 0
+		# find min and max values
+		for n in numpy.nditer(A):
+			if int(round(n)) < curMin:
+				curMin = int(round(n))
+			if int(round(n)) > curMax:
+				curMax = int(round(n))
+		# shift values up
+		if curMax < depth and curMin < 0:
+			shiftVal = depth - curMax
+			for t in numpy.nditer(A, op_flags=['readwrite']):
+				t[...] = t + shiftVal
+				if t > depth:
+					t[...] = depth
+				elif t < 0:
+					t[...] = 0
+		# shift values down
+		elif curMax > depth and curMin > 0:
+			shiftVal = curMin
+			for t in numpy.nditer(A, op_flags=['readwrite']):
+				t[...] = t - shiftVal
+				if t > depth:
+					t[...] = depth
+				elif t < 0:
+					t[...] = 0
+		# no chance to shift, just chop (TODO: perform some sort of scaling)
+		else:
+			for t in numpy.nditer(A, op_flags=['readwrite']):
+				if t > depth:
+					t[...] = depth
+				elif t < 0:
+					t[...] = 0
 
 	if filename:
 		f = open(filename, 'w')
