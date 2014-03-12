@@ -39,13 +39,13 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, wid
 	# when kmax is not 0 use the provided kmax
 	if kmax > 0:
 		i = 0
-		for t in numpy.nditer(matrixScopy, op_flags=['readwrite']):
+		for t in numpy.nditer(matrixScopy, op_flags=["readwrite"]):
 			if i < kmin or i >= kmax:
 				t[...] = 0
 			i += 1
 	# when kmax is 0 then drop eigen values less than 1.0E-14
 	else:
-		for t in numpy.nditer(matrixScopy, op_flags=['readwrite']):
+		for t in numpy.nditer(matrixScopy, op_flags=["readwrite"]):
 			if round(t, 14) <= 0:
 				t[...] = 0
 	
@@ -65,7 +65,7 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, wid
 		# shift values up
 		if curMax < depth and curMin < 0:
 			shiftVal = depth - curMax
-			for t in numpy.nditer(A, op_flags=['readwrite']):
+			for t in numpy.nditer(A, op_flags=["readwrite"]):
 				t[...] = t + shiftVal
 				if t > depth:
 					t[...] = depth
@@ -74,7 +74,7 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, wid
 		# shift values down
 		elif curMax > depth and curMin > 0:
 			shiftVal = curMin
-			for t in numpy.nditer(A, op_flags=['readwrite']):
+			for t in numpy.nditer(A, op_flags=["readwrite"]):
 				t[...] = t - shiftVal
 				if t > depth:
 					t[...] = depth
@@ -82,7 +82,7 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, filename, wid
 					t[...] = 0
 		# no chance to shift, just chop (TODO: perform some sort of scaling)
 		else:
-			for t in numpy.nditer(A, op_flags=['readwrite']):
+			for t in numpy.nditer(A, op_flags=["readwrite"]):
 				if t > depth:
 					t[...] = depth
 				elif t < 0:
