@@ -1,6 +1,24 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+"""
+This program is for learning purposes, it doesn't do anything useful outside of aiding in learning SVD.
+
+The program takes an ASCII PGM (Portable Grey Map) file, converts it into a matrix, runs SVD on it,
+removes eigenvalues above some k value (and optionally below some j value), and then outputs an ASCII
+PGM file of the resulting compressed image. It is important to note that the image is not really
+compressed; firstly we are using an inefficient ASCII representation, and secondly the PGM format
+is a bitmap, so we are writting each pixel back out to the resulting file.
+
+The SVD process can result in values above the PGM greyscale limit and below zero; most PGM viewers will
+essentially take the absolute value, which can give some unexpected results, so there is a scale option
+which will attempt to bring the resulting image within the bounds of 0 and 255 (or whatever the PGM depth
+limit was). Scale is a bit of misnomer at this point, it slides the values up or down and then clips
+values still outside of the range.
+
+ -- Christopher Stoll, UAkron, 2014
+"""
+
 import sys
 import argparse
 import numpy
