@@ -24,12 +24,12 @@ svdasmalls:
 	./svd.py ./img/a-pgm/a-00w.pgm ./out/a00w_1-3.pgm -j 1 -k 3 ${SCALE} ${CONTRAST}
 
 svd-pixelate:
-	./svd-avg.py ./img/a-pgm/a-01.pgm ./out/a-01.pgm ./out/aAvg1.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
-	./svd-avg.py ./out/aAvg1.pgm ./out/a-01.pgm ./out/aAvg2.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
-	./svd-avg.py ./out/aAvg2.pgm ./out/a-01.pgm ./out/aAvg1.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
-	./svd-avg.py ./out/aAvg1.pgm ./out/a-01.pgm ./out/aAvg2.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
-	./svd-avg.py ./out/aAvg2.pgm ./out/a-01.pgm ./out/aAvg1.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
-	./svd-avg.py ./out/aAvg1.pgm ./out/a-01.pgm ./out/aAvg2.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
+	./svd-pix.py ./img/a-pgm/a-01.pgm ./out/aAvg1.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
+	./svd-pix.py ./out/aAvg1.pgm ./out/aAvg2.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
+	./svd-pix.py ./out/aAvg2.pgm ./out/aAvg1.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
+	./svd-pix.py ./out/aAvg1.pgm ./out/aAvg2.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
+	./svd-pix.py ./out/aAvg2.pgm ./out/aAvg1.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
+	./svd-pix.py ./out/aAvg1.pgm ./out/aAvg2.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
 
 svd-avg:
 	./svd-avg.py ./img/a-pgm/a-01.pgm ./img/a-pgm/a-02.pgm ./out/aAvg1.pgm ${SVDOPTS_AVG}

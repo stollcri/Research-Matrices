@@ -140,13 +140,13 @@ def read_matrix_from_file(file_handle):
 	return image
 	
 
-def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, rescale, contrast):
+def process_svd(source_file, destination_file, kmin, kmax, rescale, contrast):
 	"""
 	Read from file provided on the command line or from stdin
 	then save uncompressed representations of the SVD compressed version
 	"""
 	
-	imagea = read_matrix_from_file(source_file_a)
+	imagea = read_matrix_from_file(source_file)
 	Ma = numpy.asmatrix(imagea.matrix)
 	U, s, Vt = numpy.linalg.svd(Ma, full_matrices=True)
 	
@@ -156,8 +156,7 @@ def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, resc
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("infile1", nargs='?', help="The source ASCII PGM file", type=argparse.FileType('r'), default=sys.stdin)
-	parser.add_argument("infile2", nargs='?', help="The source ASCII PGM file", type=argparse.FileType('r'), default=sys.stdin)
+	parser.add_argument("infile", nargs='?', help="The source ASCII PGM file", type=argparse.FileType('r'), default=sys.stdin)
 	parser.add_argument("outfile", nargs='?', help="The destination ASCII PGM file", type=argparse.FileType('w'), default=sys.stdout)
 	parser.add_argument("-j", "--kmin", help="The number of high k values to exlude", type=int, default=0)
 	parser.add_argument("-k", "--kmax", help="The number k values to use", type=int, default=0)
@@ -166,6 +165,6 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	try:
-		process_svd(args.infile1, args.infile2, args.outfile, args.kmin, args.kmax, args.scale, args.contrast)
+		process_svd(args.infile, args.outfile, args.kmin, args.kmax, args.scale, args.contrast)
 	except KeyboardInterrupt:
 		exit(0)
