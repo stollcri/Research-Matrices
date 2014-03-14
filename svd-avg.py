@@ -4,6 +4,7 @@
 import sys
 import argparse
 import numpy
+import math
 
 class Image:
 	def __init__(self, matrix=[[]], width=0, height=0, depth=0):
@@ -18,7 +19,7 @@ class Image:
 		self.matrix = [[0 for j in xrange(height)] for i in xrange(width)]
 
 
-def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, file_handle, width, height, depth, rescale=False):
+def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, file_handle, width, height, depth, rescale=False, contrast=False):
 	"""
 	Write a decomposed matrix to file uncompressed as it would show compressed
 
@@ -38,9 +39,13 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, file_handle, 
 	# when kmax is not 0 use the provided kmax
 	if kmax > 0:
 		i = 0
+		contrast_factor = (1.0 + (1 - (math.log(kmax, 2) / 10)))
 		for t in numpy.nditer(matrixScopy, op_flags=["readwrite"]):
 			if i < kmin or i >= kmax:
 				t[...] = 0
+			else:
+				if contrast:
+					t[...] = t * contrast_factor #* math.pi / 2
 			i += 1
 	# when kmax is 0 then drop eigen values less than 1.0E-14
 	else:
@@ -130,7 +135,7 @@ def read_matrix_from_file(file_handle):
 	return image
 	
 
-def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, rescale):
+def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, rescale, contrast):
 	"""
 	Read from file provided on the command line or from stdin
 	then save uncompressed representations of the SVD compressed version
@@ -173,8 +178,8 @@ def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, resc
 		#intc = ((inta * 3) + intb) / 4.0
 		#intc = ((inta * 5) + intb) / 6.0
 		Vt[x, y] = intc
-
-	write_matrices_to_file(U, s, Vt, kmin, kmax, destination_file, imagea.width, imagea.height, imagea.depth, rescale)
+	"""
+	write_matrices_to_file(U, s, Vt, kmin, kmax, destination_file, imagea.width, imagea.height, imagea.depth, rescale, contrast)
 
 
 
@@ -186,9 +191,10 @@ if __name__ == "__main__":
 	parser.add_argument("-j", "--kmin", help="The number of high k values to exlude", type=int, default=0)
 	parser.add_argument("-k", "--kmax", help="The number k values to use", type=int, default=0)
 	parser.add_argument("-s", "--scale", help="Fit resulting image depth into '0 < n < depth' bounds", action="store_true")
+	parser.add_argument("-c", "--contrast", help="Improve high contrast images", action="store_true")
 	args = parser.parse_args()
 
 	try:
-		process_svd(args.infile1, args.infile2, args.outfile, args.kmin, args.kmax, args.scale)
+		process_svd(args.infile1, args.infile2, args.outfile, args.kmin, args.kmax, args.scale, args.contrast)
 	except KeyboardInterrupt:
 		exit(0)
