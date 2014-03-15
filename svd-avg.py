@@ -56,6 +56,12 @@ def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, file_handle, 
 	# recompose the trimmed SVD matrices back into matrix A
 	A = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
 
+	if contrast:
+		depth_limit = depth # int(depth - (depth * .01))
+		for t in numpy.nditer(A, op_flags=["readwrite"]):
+			if t < depth_limit:
+				t[...] = 0
+
 	# attempt the handle out of range values (TODO: pull out to own function)
 	if rescale:
 		curMin = 0
@@ -112,6 +118,7 @@ def read_matrix_from_file(file_handle):
 	"""
 	row = 0
 	col = 0
+	rownull = True
 	image = Image()
 	for line in file_handle:
 		if line[0] == '#':
@@ -127,11 +134,32 @@ def read_matrix_from_file(file_handle):
 			image.depth = int(line)
 		else:
 			for value in line.split():
-				if col >= len(image.matrix[row]):
+				if col >= image.width:
 					row += 1
 					col = 0
+
+					# rows which are all black become all white
+					if rownull:
+						for x in xrange(0, image.width):
+							image.matrix[row][x] = image.depth
+
+					rownull = True
+
 				image.matrix[row][col] = value
+				if int(value) != 0:
+					rownull = False
 				col += 1
+
+	# columns which are all black become all white
+	for x in xrange(0, image.width):
+		colnull = True
+		for y in xrange(0, image.height):
+			if int(image.matrix[y][x]) != 0:
+				colnull = False
+		if colnull:
+			for y in xrange(0, image.height):
+				image.matrix[y][x] = image.depth
+
 	return image
 	
 
@@ -140,45 +168,61 @@ def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, resc
 	Read from file provided on the command line or from stdin
 	then save uncompressed representations of the SVD compressed version
 	"""
+	"""
+	imagea = read_matrix_from_file(source_file_a)
+	Ma = numpy.asmatrix(imagea.matrix)
+	U, s, Vt = numpy.linalg.svd(Ma, full_matrices=True)
+	"""
 	imagea = read_matrix_from_file(source_file_a)
 	Ma = numpy.asmatrix(imagea.matrix)
 	Ua, sa, Vta = numpy.linalg.svd(Ma, full_matrices=True)
-
+	
 	imageb = read_matrix_from_file(source_file_b)
 	Mb = numpy.asmatrix(imageb.matrix)
 	Ub, sb, Vtb = numpy.linalg.svd(Mb, full_matrices=True)
-	
+
 	U = Ua
 	for (x,y), value in numpy.ndenumerate(Ua):
 		inta = Ua[x, y]
 		intb = Ub[x, y]
-		intc = ((inta * 1.618) + (intb * 0.3)) / 1.9
+		#intc = ((inta * 1.618) + (intb * 0.3)) / 1.9
 		#intc = (inta + intb) / 2.0
 		#intc = ((inta * 2) + intb) / 3.0
 		#intc = ((inta * 3) + intb) / 4.0
-		#intc = ((inta * 5) + intb) / 6.0
+		#intc = ((inta * 4) + intb) / 5.0
+		intc = ((inta * 5) + intb) / 6.0
+		#intc = ((inta * 6) + intb) / 7.0
+		#intc = ((inta * 7) + intb) / 8.0
 		U[x, y] = intc
 
 	s = sa
 	for (x,), value in numpy.ndenumerate(sa):
 		inta = sa[x]
 		intb = sb[x]
-		intc = (inta + intb) / 2.0
+		#intc = ((inta * 1.618) + (intb * 0.3)) / 1.9
+		#intc = (inta + intb) / 2.0
 		#intc = ((inta * 2) + intb) / 3.0
 		#intc = ((inta * 3) + intb) / 4.0
+		#intc = ((inta * 4) + intb) / 5.0
+		intc = ((inta * 5) + intb) / 6.0
+		#intc = ((inta * 6) + intb) / 7.0
+		#intc = ((inta * 7) + intb) / 8.0
 		s[x] = intc
 
 	Vt = Vta
 	for (x,y), value in numpy.ndenumerate(Vta):
 		inta = Vta[x, y]
 		intb = Vtb[x, y]
-		intc = ((inta * 1.618) + (intb * 0.3)) / 1.9
+		#intc = ((inta * 1.618) + (intb * 0.3)) / 1.9
 		#intc = (inta + intb) / 2.0
 		#intc = ((inta * 2) + intb) / 3.0
 		#intc = ((inta * 3) + intb) / 4.0
-		#intc = ((inta * 5) + intb) / 6.0
+		#intc = ((inta * 4) + intb) / 5.0
+		intc = ((inta * 5) + intb) / 6.0
+		#intc = ((inta * 6) + intb) / 7.0
+		#intc = ((inta * 7) + intb) / 8.0
 		Vt[x, y] = intc
-	"""
+	
 	write_matrices_to_file(U, s, Vt, kmin, kmax, destination_file, imagea.width, imagea.height, imagea.depth, rescale, contrast)
 
 
