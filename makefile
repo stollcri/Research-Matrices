@@ -5,7 +5,7 @@ SVDOPTS_A = -k 8
 SVDOPTS_AVG = -k 4 -s -c
 
 LETTER_PIX = D
-SVDOPTS_PIX = -k 8 -s -c
+SVDOPTS_PIX = -k 8
 
 default: svda
 
