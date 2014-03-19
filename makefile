@@ -10,19 +10,7 @@ default: svda
 all: svda
 
 svda:
-	./svd.py ./img/A-pgm/A-01.pgm ./out/A-01.pgm ${SVDOPTS_A} ${SCALE}
-	./svd.py ./img/A-pgm/A-01.pgm ./out/A-01c.pgm ${SVDOPTS_A} ${SCALE} ${CONTRAST}
-
-svdasmalls:
-	./svd.py ./img/A-pgm/A-00b.pgm ./out/a00b_0-0.pgm ${SCALE} ${CONTRAST}
-	./svd.py ./img/A-pgm/A-00b.pgm ./out/a00b_0-2.pgm -k 2 ${SCALE} ${CONTRAST}
-	./svd.py ./img/A-pgm/A-00b.pgm ./out/a00b_0-4.pgm -k 4 ${SCALE} ${CONTRAST}
-	./svd.py ./img/A-pgm/A-00b.pgm ./out/a00b_1-3.pgm -j 1 -k 3 ${SCALE} ${CONTRAST}
-
-	./svd.py ./img/A-pgm/A-00w.pgm ./out/a00w_0-0.pgm ${SCALE} ${CONTRAST}
-	./svd.py ./img/A-pgm/A-00w.pgm ./out/a00w_0-2.pgm -k 2 ${SCALE} ${CONTRAST}
-	./svd.py ./img/A-pgm/A-00w.pgm ./out/a00w_0-4.pgm -k 4 ${SCALE} ${CONTRAST}
-	./svd.py ./img/A-pgm/A-00w.pgm ./out/a00w_1-3.pgm -j 1 -k 3 ${SCALE} ${CONTRAST}
+	./svd.py ./img/A-png/A-01.png ./out/A-01.png ${SVDOPTS_A} ${SCALE}
 
 svd-pix:
 	./svd-pix.py ./img/A-pgm/A-01.pgm ./out/A-avg.pgm ${SVDOPTS_PIX}
