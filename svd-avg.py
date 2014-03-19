@@ -190,9 +190,10 @@ def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, resc
 
 	imagea = read_matrix_from_file(source_file_a)
 	Ma = numpy.asmatrix(imagea.matrix)
-	for x in xrange(1, pixelate_count):
-		Ua, sa, Vta = numpy.linalg.svd(Ma, full_matrices=True)
-		Ma = multiply_matrices(Ua, sa, Vta, kmin, kmax, imagea.depth, rescale, contrast)
+	# for x in xrange(1, pixelate_count):
+	# 	Ua, sa, Vta = numpy.linalg.svd(Ma, full_matrices=True)
+	# 	Ma = multiply_matrices(Ua, sa, Vta, kmin, kmax, imagea.depth, rescale, contrast)
+	Ua, sa, Vta = numpy.linalg.svd(Ma, full_matrices=True)
 
 	imageb = read_matrix_from_file(source_file_b)
 	Mb = numpy.asmatrix(imageb.matrix)
