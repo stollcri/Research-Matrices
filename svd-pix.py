@@ -41,10 +41,6 @@ def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth):
 	# recompose the trimmed SVD matrices back into matrix A
 	A = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
 
-	depth_limit = depth # int(depth - (depth * .01))
-	for t in numpy.nditer(A, op_flags=["readwrite"]):
-		if t < depth_limit:
-			t[...] = 0
 
 	# attempt the handle out of range values (TODO: pull out to own function)
 	curMin = 0
@@ -81,6 +77,11 @@ def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth):
 			elif t < 0:
 				t[...] = 0
 	return A
+
+	depth_limit = depth # int(depth - (depth * .01))
+	for t in numpy.nditer(matrixComposed, op_flags=["readwrite"]):
+		if t < depth_limit:
+			t[...] = 0
 
 
 def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, file_handle, width, height, depth):
