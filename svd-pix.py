@@ -38,15 +38,14 @@ def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth):
 			if round(t, 14) <= 0:
 				t[...] = 0
 	
-	# recompose the trimmed SVD matrices back into matrix A
-	A = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
-
+	# recompose the trimmed SVD matrices back into matrix matrixComposed
+	matrixComposed = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
 
 	# attempt the handle out of range values (TODO: pull out to own function)
 	curMin = 0
 	curMax = 0
 	# find min and max values
-	for n in numpy.nditer(A):
+	for n in numpy.nditer(matrixComposed):
 		if int(round(n)) < curMin:
 			curMin = int(round(n))
 		if int(round(n)) > curMax:
@@ -54,8 +53,8 @@ def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth):
 	# shift values up
 	if curMax < depth and curMin < 0:
 		shiftVal = depth - curMax
-		for t in numpy.nditer(A, op_flags=["readwrite"]):
 			t[...] = t + shiftVal
+		for t in numpy.nditer(matrixComposed, op_flags=["readwrite"]):
 			if t > depth:
 				t[...] = depth
 			elif t < 0:
@@ -63,25 +62,26 @@ def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth):
 	# shift values down
 	elif curMax > depth and curMin > 0:
 		shiftVal = curMin
-		for t in numpy.nditer(A, op_flags=["readwrite"]):
 			t[...] = t - shiftVal
+		for t in numpy.nditer(matrixComposed, op_flags=["readwrite"]):
 			if t > depth:
 				t[...] = depth
 			elif t < 0:
 				t[...] = 0
 	# no chance to shift, just chop (TODO: perform some sort of scaling)
 	else:
-		for t in numpy.nditer(A, op_flags=["readwrite"]):
+		for t in numpy.nditer(matrixComposed, op_flags=["readwrite"]):
 			if t > depth:
 				t[...] = depth
 			elif t < 0:
 				t[...] = 0
-	return A
 
 	depth_limit = depth # int(depth - (depth * .01))
 	for t in numpy.nditer(matrixComposed, op_flags=["readwrite"]):
 		if t < depth_limit:
 			t[...] = 0
+
+	return matrixComposed
 
 
 def write_matrices_to_file(matrixU, matrixS, matrixVt, kmin, kmax, file_handle, width, height, depth):
