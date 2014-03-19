@@ -135,9 +135,11 @@ def read_matrix_from_file(filename):
 			row += 1
 			col = 0
 		# TODO: something better than taking the red value
-		if len(pixel) == 3:
+		if png_image.mode == 'L':
+			pixelr = pixel
+		elif png_image.mode == 'RGB':
 			pixelr, pixelg, pixelb = pixel
-		elif len(pixel) == 4:
+		elif png_image.mode == 'RGBA':
 			pixelr, pixelg, pixelb, pixela = pixel
 		image.matrix[row][col] = int(pixelr)
 		col += 1
