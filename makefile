@@ -2,7 +2,7 @@ SCALE = -s
 CONTRAST = -c
 LETTER_AVG = D
 SVDOPTS_A = -k 8
-SVDOPTS_PIX = -k 8
+SVDOPTS_PIX = -k 4
 SVDOPTS_AVG = -k 8 -s -c
 
 default: svda
@@ -13,12 +13,12 @@ svda:
 	./svd.py ./img/A-png/A-01.png ./out/A-01.png ${SVDOPTS_A} ${SCALE}
 
 svd-pix:
-	./svd-pix.py ./img/A-pgm/A-01.pgm ./out/A-avg.pgm ${SVDOPTS_PIX}
-	./svd-pix.py ./img/B-pgm/B-01.pgm ./out/B-avg.pgm ${SVDOPTS_PIX}
-	./svd-pix.py ./img/C-pgm/C-01.pgm ./out/C-avg.pgm ${SVDOPTS_PIX}
-	./svd-pix.py ./img/D-pgm/D-01.pgm ./out/D-avg.pgm ${SVDOPTS_PIX}
-	./svd-pix.py ./img/E-pgm/E-01.pgm ./out/E-avg.pgm ${SVDOPTS_PIX}
-	./svd-pix.py ./img/F-pgm/F-01.pgm ./out/F-avg.pgm ${SVDOPTS_PIX}
+	./svd-pix.py ./img/A-png/A-01.png ./out/A-avg.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/B-png/B-01.png ./out/B-avg.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/C-png/C-01.png ./out/C-avg.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/D-png/D-01.png ./out/D-avg.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/E-png/E-01.png ./out/E-avg.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/F-png/F-01.png ./out/F-avg.png ${SVDOPTS_PIX}
 
 svd-avg:
 	cp ./img/${LETTER_AVG}-pgm/${LETTER_AVG}-01.pgm ./out/${LETTER_AVG}-01.pgm
@@ -59,4 +59,4 @@ stuff:
 	./svd-avg.py ./img/stuff.pgm ./img/stuff.pgm ./out/stuff.pgm ${SVDOPTS_AVG}
 
 clean:
-	-rm ./out/*.pgm
+	-rm ./out/*.png
