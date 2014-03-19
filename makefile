@@ -1,9 +1,9 @@
 SCALE = -s
 CONTRAST = -c
-LETTER_AVG = B
+LETTER_AVG = D
 SVDOPTS_A = -k 8
-SVDOPTS_PIX = -k 4
-SVDOPTS_AVG = -k 4 -s -c
+SVDOPTS_PIX = -k 8
+SVDOPTS_AVG = -k 8 -s -c
 
 default: svda
 
