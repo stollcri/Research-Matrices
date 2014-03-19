@@ -50,6 +50,14 @@ def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth):
 			curMin = int(round(n))
 		if int(round(n)) > curMax:
 			curMax = int(round(n))
+	# catch some extreme values
+	# if (curMax - curMin) > (depth * 10):
+	# 	print "Whoa:", curMax, curMin
+	# 	for t in numpy.nditer(matrixComposed, op_flags=["readwrite"]):
+	# 		if t > (depth * 10):
+	# 			t[...] = (depth * 10)
+	# 		elif t < (depth * -10):
+	# 			t[...] = (depth * -10)
 	# shift values up
 	if curMax < depth and curMin < 0:
 		shiftVal = depth - curMax
