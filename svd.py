@@ -121,7 +121,7 @@ def read_matrix_from_file(filename):
 	Read a PNG file and create an Image object from it
 	"""
 	png_image = Image.open(filename)
-	png_image.thumbnail((64, 64), Image.ANTIALIAS)
+	#png_image.thumbnail((64, 64), Image.ANTIALIAS)
 
 	image = SVDimage()
 	image.depth = 255
@@ -153,10 +153,8 @@ def process_svd(source_file, destination_file, kmin, kmax, rescale, contrast):
 	then save uncompressed representations of the SVD compressed version
 	"""
 	image = read_matrix_from_file(source_file)
-
 	M = numpy.asmatrix(image.matrix)
 	U, s, Vt = numpy.linalg.svd(M, full_matrices=True)
-	
 	write_matrices_to_file(U, s, Vt, kmin, kmax, image.width, image.height, image.depth, destination_file, rescale, contrast)
 
 
