@@ -194,8 +194,8 @@ def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, resc
 		#intc = (inta + intb) / 2.0
 		#intc = ((inta * 2) + intb) / 3.0
 		#intc = ((inta * 3) + intb) / 4.0
-		#intc = ((inta * 4) + intb) / 5.0
-		intc = ((inta * 5) + intb) / 6.0
+		intc = ((inta * 4) + intb) / 5.0
+		#intc = ((inta * 5) + intb) / 6.0
 		#intc = ((inta * 6) + intb) / 7.0
 		#intc = ((inta * 7) + intb) / 8.0
 		U[x, y] = intc
@@ -208,8 +208,8 @@ def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, resc
 		#intc = (inta + intb) / 2.0
 		#intc = ((inta * 2) + intb) / 3.0
 		#intc = ((inta * 3) + intb) / 4.0
-		#intc = ((inta * 4) + intb) / 5.0
-		intc = ((inta * 5) + intb) / 6.0
+		intc = ((inta * 4) + intb) / 5.0
+		#intc = ((inta * 5) + intb) / 6.0
 		#intc = ((inta * 6) + intb) / 7.0
 		#intc = ((inta * 7) + intb) / 8.0
 		s[x] = intc
@@ -222,8 +222,8 @@ def process_svd(source_file_a, source_file_b, destination_file, kmin, kmax, resc
 		#intc = (inta + intb) / 2.0
 		#intc = ((inta * 2) + intb) / 3.0
 		#intc = ((inta * 3) + intb) / 4.0
-		#intc = ((inta * 4) + intb) / 5.0
-		intc = ((inta * 5) + intb) / 6.0
+		intc = ((inta * 4) + intb) / 5.0
+		#intc = ((inta * 5) + intb) / 6.0
 		#intc = ((inta * 6) + intb) / 7.0
 		#intc = ((inta * 7) + intb) / 8.0
 		Vt[x, y] = intc
