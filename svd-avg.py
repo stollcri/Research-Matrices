@@ -17,7 +17,7 @@ class SVDimage:
 	def set_width_and_height(self, width, height):
 		self.width = width
 		self.height = height
-		self.matrix = [[0 for j in xrange(height)] for i in xrange(width)]
+		self.matrix = [[0 for j in xrange(width)] for i in xrange(height)]
 
 
 def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth, rescale=False, contrast=False):
@@ -40,8 +40,15 @@ def multiply_matrices(matrixU, matrixS, matrixVt, kmin, kmax, depth, rescale=Fal
 			if round(t, 14) <= 0:
 				t[...] = 0
 	
+	matrixScopy = numpy.diag(matrixScopy)
+	musm, musn = matrixU.shape
+	mvsm, mvsn = matrixVt.shape
+	if musn != mvsm:
+		zeros = numpy.zeros((musn, mvsm), dtype=numpy.int32)
+		zeros[:matrixScopy.shape[0], :matrixScopy.shape[1]] = matrixScopy
+		matrixScopy = zeros
 	# recompose the trimmed SVD matrices back into matrix matrixComposed
-	matrixComposed = numpy.dot(numpy.dot(matrixU, numpy.diag(matrixScopy)), matrixVt)
+	matrixComposed = numpy.dot(numpy.dot(matrixU, matrixScopy), matrixVt)
 
 	# attempt the handle out of range values (TODO: pull out to own function)
 	if rescale:
