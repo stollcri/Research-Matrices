@@ -135,7 +135,6 @@ def read_matrix_from_file(filename, channel):
 		if col >= image.width:
 			row += 1
 			col = 0
-		# TODO: something better than taking the red value
 		if png_image.mode == 'L':
 			pixelr = pixel
 		elif png_image.mode == 'RGB':

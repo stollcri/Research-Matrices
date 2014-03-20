@@ -168,7 +168,7 @@ def process_svd(source_file, destination_file, kmin, kmax, rescale, contrast):
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("infile", help="The source PNG file", type=argparse.FileType('r'), metavar='file')
+	parser.add_argument("infile", help="The source B&W PNG file", type=argparse.FileType('r'), metavar='file')
 	parser.add_argument("outfile", help="The destination PNG file", type=argparse.FileType('w'))
 	parser.add_argument("-j", "--kmin", help="The number of high k values to exlude", type=int, default=0)
 	parser.add_argument("-k", "--kmax", help="The number k values to use", type=int, default=0)
