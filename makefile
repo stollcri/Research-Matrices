@@ -6,7 +6,7 @@ SVDOPTS_AVG = -k 8 -s -c
 
 default: svdbw
 
-all: clean svdbw
+all: deepclean trainingset train
 
 svdbw:
 	./svd.py ./img/stuff-bw.png ./out/stuff-bw.png ${SVDOPTS_A}
@@ -52,33 +52,47 @@ svd-avg:
 	./svd-avg.py ./out/avg25.png ./img/${LETTER_AVG}-png/${LETTER_AVG}-26.png ./out/avg26.png ${SVDOPTS_AVG}
 	./svd-avg.py ./out/avg26.png ./img/${LETTER_AVG}-png/${LETTER_AVG}-27.png ./out/avg27.png ${SVDOPTS_AVG}
 
-train:
-	mkdir -p ./img/A-png && ./gen-train.py A ./img/A-png
-	mkdir -p ./img/B-png && ./gen-train.py B ./img/B-png
-	mkdir -p ./img/C-png && ./gen-train.py C ./img/C-png
-	mkdir -p ./img/D-png && ./gen-train.py D ./img/D-png
-	mkdir -p ./img/E-png && ./gen-train.py E ./img/E-png
-	mkdir -p ./img/F-png && ./gen-train.py F ./img/F-png
-	mkdir -p ./img/G-png && ./gen-train.py G ./img/G-png
-	mkdir -p ./img/H-png && ./gen-train.py H ./img/H-png
-	mkdir -p ./img/I-png && ./gen-train.py I ./img/I-png
-	mkdir -p ./img/J-png && ./gen-train.py J ./img/J-png
-	mkdir -p ./img/K-png && ./gen-train.py K ./img/K-png
-	mkdir -p ./img/L-png && ./gen-train.py L ./img/L-png
-	mkdir -p ./img/M-png && ./gen-train.py M ./img/M-png
-	mkdir -p ./img/N-png && ./gen-train.py N ./img/N-png
-	mkdir -p ./img/O-png && ./gen-train.py O ./img/O-png
-	mkdir -p ./img/P-png && ./gen-train.py P ./img/P-png
-	mkdir -p ./img/Q-png && ./gen-train.py Q ./img/Q-png
-	mkdir -p ./img/R-png && ./gen-train.py R ./img/R-png
-	mkdir -p ./img/S-png && ./gen-train.py S ./img/S-png
-	mkdir -p ./img/T-png && ./gen-train.py T ./img/T-png
-	mkdir -p ./img/U-png && ./gen-train.py U ./img/U-png
-	mkdir -p ./img/V-png && ./gen-train.py V ./img/V-png
-	mkdir -p ./img/W-png && ./gen-train.py W ./img/W-png
-	mkdir -p ./img/X-png && ./gen-train.py X ./img/X-png
-	mkdir -p ./img/Y-png && ./gen-train.py Y ./img/Y-png
-	mkdir -p ./img/Z-png && ./gen-train.py Z ./img/Z-png
 
+trainingset:
+	@for letter in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do \
+		mkdir -p ./img/$$letter-png ; \
+		./gen-train.py $$letter ./img/$$letter-png ; \
+	done
+	@echo $@ complete
+
+
+pretr_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pre-$i)
+train_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,$(foreach j,1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27,job-$i-$j))
+psttr_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pst-$i)
+i = $(firstword $(subst -, ,$*))
+j = $(lastword $(subst -, ,$*))
+
+.PHONY: pretr train psttr
+pretr: ${pretr_set}
+train: pretr ${train_set} psttr; @echo $@ complete
+psttr: ${psttr_set}
+
+.PHONY: ${pretr_set}
+${pretr_set}: pre-%:
+	./svd-pix.py ./img/$*-png/$*-0.png ./out/$*-0.png ${SVDOPTS_PIX}
+
+.PHONY: ${train_set}
+${train_set}: job-%:
+	./svd-avg.py ./out/$i-$$(($j-1)).png ./img/$i-png/$i-$j.png ./out/$i-$j.png ${SVDOPTS_AVG} ; \
+
+.PHONY: ${psttr_set}
+${psttr_set}: pst-%:
+	-mv ./out/$*-27.png ./out/avg_$*.png
+	-rm ./out/$*-*.png
+
+
+.PHONY: deepclean clean cleantrain
+deepclean: clean cleantrain
 clean:
-	-rm ./out/*.png
+	@-rm ./out/*.png
+	@echo $@ complete
+cleantrain:
+	@for letter in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do \
+		rm -r ./img/$$letter-png ; \
+	done
+	@echo $@ complete
