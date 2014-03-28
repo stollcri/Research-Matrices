@@ -1,4 +1,4 @@
-LETTER_AVG = A
+LETTER_AVG = 3
 
 SVDOPTS_A = -k 8 -c
 SVDOPTS_PIX = -k 8

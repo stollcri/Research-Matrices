@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import string
 from PIL import Image, ImageFont, ImageDraw
 
 def find_crop_left(image, width, height):
@@ -44,6 +45,14 @@ def find_crop_bottom(image, width, height):
 	return height
 
 
+def gen_filename(outputdirectory, character, index):
+	valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+	dirtyfilename = character + "-" + index + ".png"
+	directoryname = outputdirectory + '/'
+	filename = ''.join(c for c in dirtyfilename if c in valid_chars)
+	return directoryname + filename
+
+
 def gen_images(character, outputdirectory):
 	font_list = {"charI24.pil", "charR24.pil", "courB24.pil", "courBO24.pil", "courO24.pil", "courR24.pil", "helvB24.pil", "helvBO24.pil", "helvO24.pil", "helvR24.pil", "luBIS24.pil", "luBS24.pil", "luIS24.pil", "luRS24.pil", "lubB24.pil", "lubBI24.pil", "lubI24.pil", "lubR24.pil", "lutBS24.pil", "lutRS24.pil", "ncenB24.pil", "ncenBI24.pil", "ncenI24.pil", "ncenR24.pil", "timB24.pil", "timBI24.pil", "timI24.pil", "timR24.pil"}
 	font_location = "./img/fonts/"
@@ -72,7 +81,7 @@ def gen_images(character, outputdirectory):
 		png_image = tmp_image.resize((image_size, image_size))
 
 		# save the image
-		filename = outputdirectory + '/' + character + "-" + str(index) + ".png"
+		filename = gen_filename(outputdirectory, character, str(index))
 		png_image.save(filename)
 
 
