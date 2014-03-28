@@ -4,24 +4,42 @@ SVDOPTS_A = -k 8 -c
 SVDOPTS_PIX = -k 8
 SVDOPTS_AVG = -k 8 -s -c
 
-default: svdbw
+default: all
 
-all: deepclean trainingset train
+.PHONY: all
+all: deepclean trainingset train test
 
+.PHONY: svdbw
 svdbw:
 	./svd.py ./img/stuff-bw.png ./out/stuff-bw.png ${SVDOPTS_A}
 
+.PHONY: svdrgb
 svdrgb:
 	./svd-rgb.py ./img/stuff-rgb.png ./out/stuff-rgb.png ${SVDOPTS_A}
 
+.PHONY: svd-pix
 svd-pix:
-	./svd-pix.py ./img/A-png/A-01.png ./out/A-avg.png ${SVDOPTS_PIX}
-	./svd-pix.py ./img/B-png/B-01.png ./out/B-avg.png ${SVDOPTS_PIX}
-	./svd-pix.py ./img/C-png/C-01.png ./out/C-avg.png ${SVDOPTS_PIX}
-	./svd-pix.py ./img/D-png/D-01.png ./out/D-avg.png ${SVDOPTS_PIX}
-	./svd-pix.py ./img/E-png/E-01.png ./out/E-avg.png ${SVDOPTS_PIX}
-	./svd-pix.py ./img/F-png/F-01.png ./out/F-avg.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/A-png/A-0.png ./img/0-png/0A.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/B-png/B-0.png ./img/0-png/0B.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/C-png/C-0.png ./img/0-png/0C.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/D-png/D-0.png ./img/0-png/0D.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/E-png/E-0.png ./img/0-png/0E.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/F-png/F-0.png ./img/0-png/0F.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/A-png/A-4.png ./img/0-png/4A.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/B-png/B-4.png ./img/0-png/4B.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/C-png/C-4.png ./img/0-png/4C.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/D-png/D-4.png ./img/0-png/4D.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/E-png/E-4.png ./img/0-png/4E.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/F-png/F-4.png ./img/0-png/4F.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/A-png/A-7.png ./img/0-png/7A.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/B-png/B-7.png ./img/0-png/7B.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/C-png/C-7.png ./img/0-png/7C.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/D-png/D-7.png ./img/0-png/7D.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/E-png/E-7.png ./img/0-png/7E.png ${SVDOPTS_PIX}
+	./svd-pix.py ./img/F-png/F-7.png ./img/0-png/7F.png ${SVDOPTS_PIX}
 
+
+.PHONY: svd-avg
 svd-avg:
 	./svd-pix.py ./img/${LETTER_AVG}-png/${LETTER_AVG}-0.png ./out/avg00.png ${SVDOPTS_PIX}
 	./svd-avg.py ./out/avg00.png ./img/${LETTER_AVG}-png/${LETTER_AVG}-1.png ./out/avg01.png ${SVDOPTS_AVG}
@@ -84,6 +102,15 @@ ${train_set}: job-%:
 ${psttr_set}: pst-%:
 	-mv ./out/$*-27.png ./out/avg_$*.png
 	-rm ./out/$*-*.png
+
+
+.PHONY: test
+test:
+	@./ml-ocr.py -b ./out/ ./out/
+	@for letter in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do \
+		./ml-ocr.py -b ./out/ ./img/$$letter-png ; \
+	done
+	@echo $@ complete
 
 
 .PHONY: deepclean clean cleantrain
