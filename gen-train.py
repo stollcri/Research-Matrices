@@ -54,7 +54,7 @@ def gen_filename(outputdirectory, character, index):
 
 
 def gen_images(character, outputdirectory):
-	font_list = {"charI24.pil", "charR24.pil", "courB24.pil", "courBO24.pil", "courO24.pil", "courR24.pil", "helvB24.pil", "helvBO24.pil", "helvO24.pil", "helvR24.pil", "luBIS24.pil", "luBS24.pil", "luIS24.pil", "luRS24.pil", "lubB24.pil", "lubBI24.pil", "lubI24.pil", "lubR24.pil", "lutBS24.pil", "lutRS24.pil", "ncenB24.pil", "ncenBI24.pil", "ncenI24.pil", "ncenR24.pil", "timB24.pil", "timBI24.pil", "timI24.pil", "timR24.pil"}
+	font_list = {"charI24.pil","charR24.pil","courB24.pil","helvB24.pil","luBIS24.pil","lubBI24.pil","timB24.pil","courBO24.pil","helvBO24.pil","luBS24.pil","luIS24.pil","lubR24.pil","timI24.pil","courO24.pil","helvO24.pil","luRS24.pil","ncenI24.pil","timBI24.pil","courR24.pil","lubB24.pil","lutRS24.pil","ncenB24.pil","lubI24.pil","helvR24.pil","ncenR24.pil","ncenBI24.pil","lutBS24.pil","timR24.pil"}
 	font_location = "./img/fonts/"
 	fill_color = "#ffffff"
 	text_color = "#000000"
