@@ -54,8 +54,8 @@ svd-avg:
 	./svd-avg.py ./out/avg26.png ./img/train-png/${LETTER_AVG}-27.png ./out/avg27.png ${SVDOPTS_AVG}
 
 
-.PHONY: trainingset trainingset-upper trainingset-lower
-trainingset: trainingset-upper trainingset-lower
+.PHONY: trainingset trainingset-upper trainingset-lower trainingset-number
+trainingset: trainingset-upper trainingset-lower trainingset-number
 
 trainingset-upper:
 	@for letter in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do \
@@ -66,6 +66,13 @@ trainingset-upper:
 
 trainingset-lower:
 	@for letter in a b c d e f g h i j k l m n o p q r s t u v w x y z ; do \
+		mkdir -p ./img/train-png ; \
+		./gen-train.py $$letter ./img/train-png ; \
+	done
+	@echo $@ complete
+
+trainingset-number:
+	@for letter in 0 1 2 3 4 5 6 7 8 9 ; do \
 		mkdir -p ./img/train-png ; \
 		./gen-train.py $$letter ./img/train-png ; \
 	done
@@ -99,7 +106,6 @@ ${psttr_set}: pst-%:
 
 .PHONY: test
 test:
-	#./ml-ocr.py -b ./out/ ./out/
 	./ml-ocr.py -b ./out/ ./img/train-png/
 
 
