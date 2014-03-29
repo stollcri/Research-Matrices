@@ -2,7 +2,7 @@ LETTER_AVG = 3
 
 SVDOPTS_A = -k 8 -c
 SVDOPTS_PIX = -k 8
-SVDOPTS_AVG = -k 8 -s -c
+SVDOPTS_AVG = -c
 
 default: all
 
@@ -41,7 +41,7 @@ svd-pix:
 
 .PHONY: svd-avg
 svd-avg:
-	./svd-pix.py ./img/${LETTER_AVG}-png/${LETTER_AVG}-0.png ./out/avg00.png ${SVDOPTS_PIX}
+	./svd-avg.py ./img/${LETTER_AVG}-png/${LETTER_AVG}-1.png ./img/${LETTER_AVG}-png/${LETTER_AVG}-1.png ./out/avg00.png ${SVDOPTS_AVG}
 	./svd-avg.py ./out/avg00.png ./img/${LETTER_AVG}-png/${LETTER_AVG}-1.png ./out/avg01.png ${SVDOPTS_AVG}
 	./svd-avg.py ./out/avg01.png ./img/${LETTER_AVG}-png/${LETTER_AVG}-2.png ./out/avg02.png ${SVDOPTS_AVG}
 	./svd-avg.py ./out/avg02.png ./img/${LETTER_AVG}-png/${LETTER_AVG}-3.png ./out/avg03.png ${SVDOPTS_AVG}
@@ -87,20 +87,20 @@ j = $(lastword $(subst -, ,$*))
 
 .PHONY: pretr train psttr
 pretr: ${pretr_set}
-train: pretr ${train_set} psttr; @echo $@ complete
+train: pretr ${train_set} ; @echo $@ complete
 psttr: ${psttr_set}
 
 .PHONY: ${pretr_set}
 ${pretr_set}: pre-%:
-	./svd-pix.py ./img/$*-png/$*-0.png ./out/$*-0.png ${SVDOPTS_PIX}
+	./svd-avg.py ./img/$i-png/$i-0.png ./img/$i-png/$i-0.png ./out/$*-0.png ${SVDOPTS_AVG}
 
 .PHONY: ${train_set}
 ${train_set}: job-%:
-	./svd-avg.py ./out/$i-$$(($j-1)).png ./img/$i-png/$i-$j.png ./out/$i-$j.png ${SVDOPTS_AVG} ; \
+	./svd-avg.py ./out/$i-$$(($j-1)).png ./img/$i-png/$i-$j.png ./out/$i-$j.png ${SVDOPTS_AVG}
 
 .PHONY: ${psttr_set}
 ${psttr_set}: pst-%:
-	-mv ./out/$*-27.png ./out/avg_$*.png
+	-mv ./out/avg_$*.png ./out/$*.png
 	-rm ./out/$*-*.png
 
 
