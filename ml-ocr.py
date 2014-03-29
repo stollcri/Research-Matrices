@@ -31,7 +31,8 @@ def read_image(filename):
 		col += 1
 
 	image_name = os.path.splitext(os.path.basename(filename))[0]
-	return image_name, png_array
+	letter, letter_case = image_name.split('_')
+	return letter, png_array
 
 
 def load_knowledge(knowledge_directory, knowledge_filter=".png"):
@@ -69,6 +70,7 @@ def test_knowledge(knowledge, question):
 
 def start_batch_mode(knowledge, directory, batch_filter=".png"):
 	answer_wrong_count = 0
+	answer_close_count = 0
 	answer_correct_count = 0
 	for filename in os.listdir(directory):
 		if filename.endswith(batch_filter):
@@ -79,17 +81,26 @@ def start_batch_mode(knowledge, directory, batch_filter=".png"):
 				answer = test_knowledge(knowledge, question)
 				#print filename, "\t=>", answer
 				image_name = os.path.splitext(os.path.basename(filename))[0]
-				letter, number = image_name.split('-')
-				#
-				# print letter, number, "\t=>", answer
-				#
+				letter_cased, number = image_name.split('-')
+				letter, letter_case = image_name.split('_')
 				if answer == letter:
 					answer_correct_count += 1
+					#print letter, number, "\t=>", answer
 				else:
-					answer_wrong_count += 1
+					if answer.lower() == letter.lower():
+						answer_close_count += 1
+						#print letter, number, "\t=>", answer
+					else:
+						answer_wrong_count += 1
+						print letter, number, "\t=>", answer
 
-	percent_correct = (answer_correct_count / float(answer_correct_count + answer_wrong_count)) * 100
-	print letter, ':', answer_correct_count, '/', (answer_correct_count + answer_wrong_count), "=", percent_correct
+	answer_total = float(answer_correct_count + answer_close_count + answer_wrong_count)
+	
+	percent_correct = (answer_correct_count / answer_total) * 100
+	print answer_correct_count, '/', answer_total, "=", percent_correct
+
+	percent_close = ((answer_correct_count + answer_close_count) / answer_total) * 100
+	print (answer_correct_count + answer_close_count), '/', answer_total, "=", percent_close
 
 
 def start_interactive_mode(knowledge):

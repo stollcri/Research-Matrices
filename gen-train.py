@@ -47,7 +47,11 @@ def find_crop_bottom(image, width, height):
 
 def gen_filename(outputdirectory, character, index):
 	valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
-	dirtyfilename = character + "-" + index + ".png"
+	if character.isupper():
+		character_case = 'u'
+	else:
+		character_case = 'l'
+	dirtyfilename = character + '_' + character_case + '-' + index + ".png"
 	directoryname = outputdirectory + '/'
 	filename = ''.join(c for c in dirtyfilename if c in valid_chars)
 	return directoryname + filename
