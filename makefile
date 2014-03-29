@@ -87,7 +87,7 @@ j = $(lastword $(subst -, ,$*))
 
 .PHONY: pretr train psttr
 pretr: ${pretr_set}
-train: pretr ${train_set} ; @echo $@ complete
+train: pretr ${train_set} psttr; @echo $@ complete
 psttr: ${psttr_set}
 
 .PHONY: ${pretr_set}
@@ -106,7 +106,7 @@ ${psttr_set}: pst-%:
 
 .PHONY: test
 test:
-	@./ml-ocr.py -b ./out/ ./out/
+	#@./ml-ocr.py -b ./out/ ./out/
 	@for letter in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do \
 		./ml-ocr.py -b ./out/ ./img/$$letter-png ; \
 	done

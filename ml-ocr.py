@@ -49,10 +49,12 @@ def test_knowledge(knowledge, question):
 		fact = fact_info[1]
 		in_common = 0
 		for index, feature in enumerate(fact):
-			if question[index] == fact[index]:
-				in_common += 1
+			in_common += (255 - abs(question[index] - fact[index]))
+			# if question[index] == fact[index]:
+			# 	in_common += 255
 		scores.append(in_common)
-	
+		
+	#print scores
 	max_score = 0
 	max_score_spot = -1
 	for index, score in enumerate(scores):
@@ -66,6 +68,8 @@ def test_knowledge(knowledge, question):
 
 
 def start_batch_mode(knowledge, directory, batch_filter=".png"):
+	answer_wrong_count = 0
+	answer_correct_count = 0
 	for filename in os.listdir(directory):
 		if filename.endswith(batch_filter):
 			full_filename = directory + '/' + filename
@@ -73,7 +77,16 @@ def start_batch_mode(knowledge, directory, batch_filter=".png"):
 			question = question_info[1]
 			if question:
 				answer = test_knowledge(knowledge, question)
-				print filename, "\t=>", answer
+				#print filename, "\t=>", answer
+				image_name = os.path.splitext(os.path.basename(filename))[0]
+				letter, number = image_name.split('-')
+				if answer == letter:
+					answer_correct_count += 1
+				else:
+					answer_wrong_count += 1
+
+	percent_correct = (answer_correct_count / float(answer_correct_count + answer_wrong_count)) * 100
+	print letter, ':', answer_correct_count, '/', (answer_correct_count + answer_wrong_count), "=", percent_correct
 
 
 def start_interactive_mode(knowledge):
