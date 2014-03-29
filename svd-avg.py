@@ -83,9 +83,11 @@ def merge_matrices(imagea, imageb, kmax, contrast=False):
 			matrixScopy[k] = 0
 		else:
 			if k % 2:
-				matrixScopy[k] = sb[int(k/2)] *.25
+				#matrixScopy[k] = sb[int(k/2)] *.25
+				matrixScopy[k] = sb[int(k/2)] *.3
 			else:
-				matrixScopy[k] = sa[int(k/2)] *.75
+				#matrixScopy[k] = sa[int(k/2)] *.75
+				matrixScopy[k] = sa[int(k/2)] *.7
 
 	# shape the eigenvalue matrix to fit both U and Vt
 	# e.g.: m_U_m * m_S_n * n_Vt_n
@@ -102,14 +104,15 @@ def merge_matrices(imagea, imageb, kmax, contrast=False):
 
 	if contrast:
 		depth = imagea.depth
-		depth_min = int(depth - (depth * .8))
-		depth_max = int(depth - (depth * .2))
+		depth_min = int(depth - (depth * .75))
+		depth_max = int(depth - (depth * .25))
 		for t in numpy.nditer(matrixComposed, op_flags=["readwrite"]):
 			if t < depth_min:
 				t[...] = 0
 			elif t > depth_max:
 				t[...] = depth
-
+			else:
+				t[...] = t - (t / 7)
 	return matrixComposed
 
 

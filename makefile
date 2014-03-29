@@ -100,8 +100,8 @@ ${train_set}: job-%:
 
 .PHONY: ${psttr_set}
 ${psttr_set}: pst-%:
-	-mv ./out/avg_$*.png ./out/$*.png
-	-rm ./out/$*-*.png
+	-mv ./out/$*-27.png ./out/$*.png
+	#-rm ./out/$*-*.png
 
 
 .PHONY: test

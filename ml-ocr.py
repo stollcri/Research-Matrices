@@ -50,7 +50,7 @@ def test_knowledge(knowledge, question):
 		in_common = 0
 		for index, feature in enumerate(fact):
 			in_common += (255 - abs(question[index] - fact[index]))
-			# if question[index] == fact[index]:
+			# if question[index] == fact[index] and question[index] < 255:
 			# 	in_common += 255
 		scores.append(in_common)
 		
@@ -80,6 +80,9 @@ def start_batch_mode(knowledge, directory, batch_filter=".png"):
 				#print filename, "\t=>", answer
 				image_name = os.path.splitext(os.path.basename(filename))[0]
 				letter, number = image_name.split('-')
+				#
+				# print letter, number, "\t=>", answer
+				#
 				if answer == letter:
 					answer_correct_count += 1
 				else:
