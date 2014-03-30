@@ -57,6 +57,13 @@ svd-avg:
 .PHONY: trainingset trainingset-upper trainingset-lower trainingset-number
 trainingset: trainingset-upper trainingset-lower trainingset-number
 
+trainingset-test:
+	@for letter in A; do \
+		mkdir -p ./img/train-png ; \
+		./gen-train.py $$letter ./img/train-png ; \
+	done
+	@echo $@ complete
+
 trainingset-upper:
 	@for letter in A B C D E F G H I J K L M N O P Q R S T U V W X Y Z ; do \
 		mkdir -p ./img/train-png ; \
