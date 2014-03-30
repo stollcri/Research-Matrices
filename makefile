@@ -7,7 +7,7 @@ SVDOPTS_AVG = -c
 default: all
 
 .PHONY: all
-all: deepclean trainingset train test
+all: deepclean trainingset train
 
 .PHONY: svdbw
 svdbw:
