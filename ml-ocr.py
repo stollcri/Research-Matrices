@@ -12,6 +12,7 @@ def read_image(filename):
 		return 0, []
 
 	png_image = Image.open(filename)
+	png_image.thumbnail((32, 32), Image.ANTIALIAS)
 	png_width, png_height = png_image.size
 	png_array = [0 for i in xrange(png_width * png_height)]
 
@@ -88,6 +89,12 @@ def start_batch_mode(knowledge, directory, batch_filter=".png"):
 					print "\033[92m" + letter, number, "\t=>", answer + "\033[0m"
 				else:
 					if answer.lower() == letter.lower():
+						answer_close_count += 1
+						print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+					elif (answer == '0' or answer == 'O' or answer == 'o') and (letter == '0' or letter == 'O' or letter == 'o'):
+						answer_close_count += 1
+						print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+					elif (answer == '1' or answer == 'I' or answer == 'l') and (letter == '1' or letter == 'I' or letter == 'l'):
 						answer_close_count += 1
 						print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
 					else:
