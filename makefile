@@ -86,28 +86,75 @@ trainingset-number:
 	@echo $@ complete
 
 
-pretr_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pre-$i)
-train_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,$(foreach j,1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32,job-$i-$j))
-psttr_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pst-$i)
+.PHONY: train
+train: train_u train_l train_n
+
+pretr_set_u := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pre-$i)
+train_set_u := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,$(foreach j,1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32,job-$i-$j))
+psttr_set_u := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pst-$i)
 i = $(firstword $(subst -, ,$*))
 j = $(lastword $(subst -, ,$*))
 
-.PHONY: pretr train psttr
-pretr: ${pretr_set}
-train: pretr ${train_set} psttr; @echo $@ complete
-psttr: ${psttr_set}
+.PHONY: pretr_u train_u psttr_u
+pretr_u: ${pretr_set_u}
+train_u: pretr_u ${train_set_u} psttr_u; @echo $@ complete
+psttr_u: ${psttr_set_u}
 
-.PHONY: ${pretr_set}
-${pretr_set}: pre-%:
+.PHONY: ${pretr_set_u}
+${pretr_set_u}: pre-%:
 	./svd-avg.py ./img/train-png/$i_u-0.png ./img/train-png/$i_u-0.png ./out/$*_u-0.png ${SVDOPTS_AVG}
 
-.PHONY: ${train_set}
-${train_set}: job-%:
+.PHONY: ${train_set_u}
+${train_set_u}: job-%:
 	./svd-avg.py ./out/$i_u-$$(($j-1)).png ./img/train-png/$i_u-$j.png ./out/$i_u-$j.png ${SVDOPTS_AVG}
 
-.PHONY: ${psttr_set}
-${psttr_set}: pst-%:
+.PHONY: ${psttr_set_u}
+${psttr_set_u}: pst-%:
 	-mv ./out/$*_u-27.png ./out/$*_u.png
+	-rm ./out/$*_?-*.png
+
+pretr_set_l := $(foreach i,a b c d e f g h i j k l m n o p q r s t u v w x y z,pre-$i)
+train_set_l := $(foreach i,a b c d e f g h i j k l m n o p q r s t u v w x y z,$(foreach j,1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32,job-$i-$j))
+psttr_set_l := $(foreach i,a b c d e f g h i j k l m n o p q r s t u v w x y z,pst-$i)
+
+.PHONY: pretr_l train_l psttr_l
+pretr_l: ${pretr_set_l}
+train_l: pretr_l ${train_set_l} psttr_l; @echo $@ complete
+psttr_l: ${psttr_set_l}
+
+.PHONY: ${pretr_set_l}
+${pretr_set_l}: pre-%:
+	./svd-avg.py ./img/train-png/$i_l-0.png ./img/train-png/$i_l-0.png ./out/$*_l-0.png ${SVDOPTS_AVG}
+
+.PHONY: ${train_set_l}
+${train_set_l}: job-%:
+	./svd-avg.py ./out/$i_l-$$(($j-1)).png ./img/train-png/$i_l-$j.png ./out/$i_l-$j.png ${SVDOPTS_AVG}
+
+.PHONY: ${psttr_set_l}
+${psttr_set_l}: pst-%:
+	-mv ./out/$*_l-27.png ./out/$*_l.png
+	-rm ./out/$*_?-*.png
+
+pretr_set_n := $(foreach i,0 1 2 3 4 5 6 7 8 9,pre-$i)
+train_set_n := $(foreach i,0 1 2 3 4 5 6 7 8 9,$(foreach j,1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32,job-$i-$j))
+psttr_set_n := $(foreach i,0 1 2 3 4 5 6 7 8 9,pst-$i)
+
+.PHONY: pretr_n train_n psttr_n
+pretr_n: ${pretr_set_n}
+train_n: pretr_n ${train_set_n} psttr_n; @echo $@ complete
+psttr_n: ${psttr_set_n}
+
+.PHONY: ${pretr_set_n}
+${pretr_set_n}: pre-%:
+	./svd-avg.py ./img/train-png/$i_n-0.png ./img/train-png/$i_n-0.png ./out/$*_n-0.png ${SVDOPTS_AVG}
+
+.PHONY: ${train_set_n}
+${train_set_n}: job-%:
+	./svd-avg.py ./out/$i_n-$$(($j-1)).png ./img/train-png/$i_n-$j.png ./out/$i_n-$j.png ${SVDOPTS_AVG}
+
+.PHONY: ${psttr_set_n}
+${psttr_set_n}: pst-%:
+	-mv ./out/$*_n-27.png ./out/$*_n.png
 	-rm ./out/$*_?-*.png
 
 

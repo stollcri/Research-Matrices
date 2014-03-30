@@ -49,8 +49,10 @@ def gen_filename(outputdirectory, character, index):
 	valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
 	if character.isupper():
 		character_case = 'u'
-	else:
+	elif character.islower():
 		character_case = 'l'
+	else:
+		character_case = 'n'
 	dirtyfilename = character + '_' + character_case + '-' + index + ".png"
 	directoryname = outputdirectory + '/'
 	filename = ''.join(c for c in dirtyfilename if c in valid_chars)
