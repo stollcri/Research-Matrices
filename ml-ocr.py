@@ -85,14 +85,14 @@ def start_batch_mode(knowledge, directory, batch_filter=".png"):
 				letter, letter_case = image_name.split('_')
 				if answer == letter:
 					answer_correct_count += 1
-					#print letter, number, "\t=>", answer
+					print "\033[92m" + letter, number, "\t=>", answer + "\033[0m"
 				else:
 					if answer.lower() == letter.lower():
 						answer_close_count += 1
-						#print letter, number, "\t=>", answer
+						print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
 					else:
 						answer_wrong_count += 1
-						print letter, number, "\t=>", answer
+						print "\033[91m" + letter, number, "\t=>", answer + "\033[0m"
 
 	answer_total = float(answer_correct_count + answer_close_count + answer_wrong_count)
 	
