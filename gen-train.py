@@ -83,6 +83,8 @@ def gen_images(character, outputdirectory):
 		y_bottom = find_crop_bottom(new_image, image_size, image_size)
 		tmp_image = new_image.crop((x_left-1, y_top-1, x_right+2, y_bottom+2))
 		png_image = tmp_image.resize((image_size, image_size))
+		# TODO: change above to below
+		#png_image.thumbnail((128, 128), Image.ANTIALIAS)
 
 		# save the image
 		filename = gen_filename(outputdirectory, character, str(index))
