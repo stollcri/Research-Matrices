@@ -65,6 +65,7 @@ def gen_images(character, outputdirectory):
 	fill_color = "#ffffff"
 	text_color = "#000000"
 	image_size = 128
+	image_size_final = 32
 
 	for index, font_name in enumerate(font_list):
 		new_image = Image.new('L', (image_size, image_size))
@@ -75,18 +76,25 @@ def gen_images(character, outputdirectory):
 
 		# draw the character
 		font_path = font_location + font_name
-		text_font = ImageFont.truetype(font_path, 64)
-		new_draw.text((4, 4), character+' ', text_color, text_font)
+		text_font = ImageFont.truetype(font_path, 72)
+		new_draw.text((8, 8), character+' ', text_color, text_font)
 
-		# remove excess border and resize
+		# remove excess border
 		x_left = find_crop_left(new_image, image_size, image_size)
 		x_right = find_crop_right(new_image, image_size, image_size)
 		y_top = find_crop_top(new_image, image_size, image_size)
 		y_bottom = find_crop_bottom(new_image, image_size, image_size)
 		tmp_image = new_image.crop((x_left-1, y_top-1, x_right+2, y_bottom+2))
-		png_image = tmp_image.resize((image_size, image_size))
-		# TODO: change above to below
-		#png_image.thumbnail((128, 128), Image.ANTIALIAS)
+
+		# fit character to final image size
+		tmp_image.thumbnail((image_size_final-2, image_size_final-2), Image.ANTIALIAS)
+		png_image = Image.new('L', (image_size_final, image_size_final))
+		new_draw = ImageDraw.Draw(png_image)
+		new_draw.rectangle(((0, 0), (image_size_final, image_size_final)), fill_color)
+		width, height = tmp_image.size
+		originx = int((image_size_final - width) / 2)
+		originy = int((image_size_final - height) / 2)
+		png_image.paste(tmp_image, (originx, originy, originx+width, originy+height))
 
 		# save the image
 		filename = gen_filename(outputdirectory, character, str(index))
