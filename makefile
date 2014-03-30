@@ -87,7 +87,7 @@ trainingset-number:
 
 
 pretr_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pre-$i)
-train_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,$(foreach j,1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27,job-$i-$j))
+train_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,$(foreach j,1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32,job-$i-$j))
 psttr_set := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,pst-$i)
 i = $(firstword $(subst -, ,$*))
 j = $(lastword $(subst -, ,$*))

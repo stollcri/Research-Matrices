@@ -58,11 +58,11 @@ def gen_filename(outputdirectory, character, index):
 
 
 def gen_images(character, outputdirectory):
-	font_list = {"charI24.pil","charR24.pil","courB24.pil","helvB24.pil","luBIS24.pil","lubBI24.pil","timB24.pil","courBO24.pil","helvBO24.pil","luBS24.pil","luIS24.pil","lubR24.pil","timI24.pil","courO24.pil","helvO24.pil","luRS24.pil","ncenI24.pil","timBI24.pil","courR24.pil","lubB24.pil","lutRS24.pil","ncenB24.pil","lubI24.pil","helvR24.pil","ncenR24.pil","ncenBI24.pil","lutBS24.pil","timR24.pil"}
-	font_location = "./img/fonts/"
+	font_list = {"AmericanTypewriter.ttc","Andale Mono.ttf","Apple Chancery.ttf","Apple LiGothic Medium.ttf","Apple LiSung Light.ttf","AppleGothic.ttf","AppleMyungjo.ttf","AppleSDGothicNeo-ExtraBold.otf","AppleSDGothicNeo-Heavy.otf","AppleSDGothicNeo-Light.otf","AppleSDGothicNeo-Medium.otf","AppleSDGothicNeo-SemiBold.otf","AppleSDGothicNeo-Thin.otf","AppleSDGothicNeo-UltraLight.otf","Arial Black.ttf","Arial Bold Italic.ttf","Arial Bold.ttf","Arial Italic.ttf","Arial Narrow Bold Italic.ttf","Arial Narrow Bold.ttf","Arial Narrow Italic.ttf","Arial Narrow.ttf","Arial Rounded Bold.ttf","Arial Unicode.ttf","Arial.ttf","Athelas.ttc","Ayuthaya.ttf","Bangla MN.ttc","Bangla Sangam MN.ttc","Baoli.ttc","Baskerville.ttc","BiauKai.ttf","BigCaslon.ttf","Brush Script.ttf","Chalkboard.ttc","ChalkboardSE.ttc","Chalkduster.ttf","CharcoalCY.dfont","Charter.ttc","Cochin.ttc","Comic Sans MS Bold.ttf","Comic Sans MS.ttf","Copperplate.ttc","Courier New Bold Italic.ttf","Courier New Bold.ttf","Courier New Italic.ttf","Courier New.ttf","DIN Alternate Bold.ttf","DIN Condensed Bold.ttf","Devanagari Sangam MN.ttc","Didot.ttc","EuphemiaCAS.ttc","Futura.ttc","GenevaCY.dfont","Georgia Bold Italic.ttf","Georgia Bold.ttf","Georgia Italic.ttf","Georgia.ttf","GillSans.ttc","Gujarati Sangam MN.ttc","Gungseouche.ttf","Gurmukhi MN.ttc","Gurmukhi Sangam MN.ttc","Hannotate.ttc","Hanzipen.ttc","HeadlineA.ttf","Hei.ttf","HelveticaCY.dfont","Herculanum.ttf","Hiragino Sans GB W3.otf","Hiragino Sans GB W6.otf","Hoefler Text.ttc","Impact.ttf","InaiMathi.ttf","Iowan Old Style.ttc","Kai.ttf","Kaiti.ttc","Kannada MN.ttc","Kannada Sangam MN.ttc","Kefa.ttc","Khmer MN.ttc","Khmer Sangam MN.ttf","Krungthep.ttf","Lantinghei.ttc","Lao Sangam MN.ttf","Libian.ttc","Malayalam MN.ttc","Malayalam Sangam MN.ttc","Marion.ttc","Microsoft Sans Serif.ttf","NanumGothic.ttc","NanumMyeongjo.ttc","NanumScript.ttc","Oriya MN.ttc","Oriya Sangam MN.ttc","Osaka.ttf","OsakaMono.ttf","PCmyoungjo.ttf","PTMono.ttc","PTSans.ttc","PTSerif.ttc","PTSerifCaption.ttc","Papyrus.ttc","Pilgiche.ttf","PlantagenetCherokee.ttf","Sathu.ttf","Savoye LET.ttc","Seravek.ttc","Silom.ttf","Sinhala MN.ttc","Sinhala Sangam MN.ttc","Skia.ttf","SnellRoundhand.ttc","Songti.ttc","SuperClarendon.ttc","Tahoma Bold.ttf","Tahoma.ttf","Tamil MN.ttc","Tamil Sangam MN.ttc","Telugu MN.ttc","Telugu Sangam MN.ttc","Times New Roman Bold Italic.ttf","Times New Roman Bold.ttf","Times New Roman Italic.ttf","Times New Roman.ttf","Trebuchet MS Bold Italic.ttf","Trebuchet MS Bold.ttf","Trebuchet MS Italic.ttf","Trebuchet MS.ttf","Verdana Bold Italic.ttf","Verdana Bold.ttf","Verdana Italic.ttf","Verdana.ttf","WawaSC-Regular.otf","WawaTC-Regular.otf","WeibeiSC-Bold.otf","WeibeiTC-Bold.otf","Xingkai.ttc","Yu Gothic Bold.otf","Yu Gothic Medium.otf","Yu Mincho Demibold.otf","Yu Mincho Medium.otf","Yuanti.ttc","YuppySC-Regular.otf","YuppyTC-Regular.otf","Zapfino.ttf"}
+	font_location = "/Library/Fonts/"
 	fill_color = "#ffffff"
 	text_color = "#000000"
-	image_size = 48
+	image_size = 128
 
 	for index, font_name in enumerate(font_list):
 		new_image = Image.new('L', (image_size, image_size))
@@ -73,7 +73,7 @@ def gen_images(character, outputdirectory):
 
 		# draw the character
 		font_path = font_location + font_name
-		text_font = ImageFont.load(font_path)
+		text_font = ImageFont.truetype(font_path, 64)
 		new_draw.text((4, 4), character+' ', text_color, text_font)
 
 		# remove excess border and resize
@@ -87,6 +87,7 @@ def gen_images(character, outputdirectory):
 		# save the image
 		filename = gen_filename(outputdirectory, character, str(index))
 		png_image.save(filename)
+		#print filename, "\t<", font_name
 
 
 if __name__ == "__main__":

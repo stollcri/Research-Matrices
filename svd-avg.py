@@ -134,7 +134,7 @@ def read_matrix_from_file(filename):
 	Read a PNG file and create an Image object from it
 	"""
 	png_image = Image.open(filename)
-	png_image.thumbnail((64, 64), Image.ANTIALIAS)
+	png_image.thumbnail((128, 128), Image.ANTIALIAS)
 
 	image = SVDimage()
 	image.depth = 255
