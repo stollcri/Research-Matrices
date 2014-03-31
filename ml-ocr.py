@@ -86,17 +86,17 @@ def start_batch_mode(knowledge, directory, batch_filter=".png"):
 				letter, letter_case = image_name.split('_')
 				if answer == letter:
 					answer_correct_count += 1
-					print "\033[92m" + letter, number, "\t=>", answer + "\033[0m"
+					#print "\033[92m" + letter, number, "\t=>", answer + "\033[0m"
 				else:
 					if answer.lower() == letter.lower():
 						answer_close_count += 1
-						print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+						#print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
 					elif (answer == '0' or answer == 'O' or answer == 'o') and (letter == '0' or letter == 'O' or letter == 'o'):
 						answer_close_count += 1
-						print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+						#print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
 					elif (answer == '1' or answer == 'I' or answer == 'l') and (letter == '1' or letter == 'I' or letter == 'l'):
 						answer_close_count += 1
-						print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+						#print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
 					else:
 						answer_wrong_count += 1
 						print "\033[91m" + letter, number, "\t=>", answer + "\033[0m"
