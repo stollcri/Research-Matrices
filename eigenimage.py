@@ -2,30 +2,9 @@
 # -*- coding: utf-8 -*-
 
 import os
-# import sys
 import argparse
-# import numpy
 import math
 from PIL import Image
-
-
-# def get_k_limit(sigma, sigma_width):
-# 	klimit = 8
-# 	last_eigenvalue = 0
-# 	eigenvalues = numpy.nditer(sigma, flags=['f_index'])
-# 	while not eigenvalues.finished:
-# 		if eigenvalues.index > 4:
-# 			if last_eigenvalue:
-# 				if (eigenvalues[0] * 10) < last_eigenvalue:
-# 					klimit = eigenvalues.index - 1
-# 					break
-# 		last_eigenvalue = eigenvalues[0]
-# 		eigenvalues.iternext()
-
-# 	if klimit > sigma_width:
-# 		klimit = int(sigma_width / 2)
-
-# 	return klimit
 
 
 def add_to_matrix_from_file(filename):
@@ -51,47 +30,6 @@ def add_to_matrix_from_file(filename):
 		image.append(int(pixelr))
 		col += 1
 	return image
-
-	# # Experiment with decomposing before averaging
-	# row = 0
-	# col = 0
-	# image = [[]]
-	# image = [[0 for j in xrange(32)] for i in xrange(32)]
-	# for pixel in list(png_image.getdata()):
-	# 	if col >= 32:
-	# 		row += 1
-	# 		col = 0
-	# 	# TODO: something better than taking the red value
-	# 	if png_image.mode == 'L':
-	# 		pixelr = pixel
-	# 	elif png_image.mode == 'RGB':
-	# 		pixelr, pixelg, pixelb = pixel
-	# 	elif png_image.mode == 'RGBA':
-	# 		pixelr, pixelg, pixelb, pixela = pixel
-	# 	image[row][col] = int(pixelr)
-	# 	col += 1
-
-	# # discard non principal components
-	# M = numpy.asmatrix(image)
-	# U, s, Vt = numpy.linalg.svd(M, full_matrices=True)
-	# klimit = get_k_limit(s, 32)
-
-	# for i in xrange(klimit,32):
-	# 	s[i] = 0
-	# # shape the eigenvalue matrix to fit both U and Vt
-	# # e.g.: m_U_m * m_S_n * n_Vt_n
-	# matrixScopy = numpy.diag(s)
-	# musm, musn = U.shape
-	# mvsm, mvsn = Vt.shape
-	# if musn != mvsm:
-	# 	zeros = numpy.zeros((musn, mvsm), dtype=numpy.float)
-	# 	zeros[:matrixScopy.shape[0], :matrixScopy.shape[1]] = matrixScopy
-	# 	matrixScopy = zeros
-
-	# matrixComposed = numpy.dot(numpy.dot(U, matrixScopy), Vt)
-	# image_fixed = numpy.asarray(matrixComposed).flatten()
-
-	# return image_fixed
 
 
 def read_images(source_directory):
