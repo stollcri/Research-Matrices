@@ -47,7 +47,6 @@ def load_knowledge(knowledge_directory, knowledge_filter=".png"):
 
 # k-nearest neighbor
 def test_knowledge(knowledge, question):
-	# TODO: switch to a cosine similarity measure -- http://gist.neo4j.org/?8173017
 	scores = []
 	for fact_info in knowledge:
 		fact = fact_info[1]
@@ -58,6 +57,7 @@ def test_knowledge(knowledge, question):
 		# 	# 	in_common += 255
 		# scores.append(in_common)
 
+		# Cosine similarity -- http://en.wikipedia.org/wiki/Cosine_similarity -- http://gist.neo4j.org/?8173017
 		numerator = 0
 		denominatorA = 0
 		denominatorB = 0
