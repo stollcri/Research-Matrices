@@ -45,7 +45,9 @@ def load_knowledge(knowledge_directory, knowledge_filter=".png"):
 	return knowledge
 
 
+# k-nearest neighbor
 def test_knowledge(knowledge, question):
+	# TODO: switch to a cosine similarity measure -- http://gist.neo4j.org/?8173017
 	scores = []
 	for fact_info in knowledge:
 		fact = fact_info[1]
