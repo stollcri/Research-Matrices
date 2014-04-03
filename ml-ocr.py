@@ -51,12 +51,27 @@ def test_knowledge(knowledge, question):
 	scores = []
 	for fact_info in knowledge:
 		fact = fact_info[1]
-		in_common = 0
+		# in_common = 0
+		# for index, feature in enumerate(fact):
+		# 	in_common += (255 - abs(question[index] - fact[index]))
+		# 	# if question[index] == fact[index] and question[index] < 255:
+		# 	# 	in_common += 255
+		# scores.append(in_common)
+
+		numerator = 0
+		denominatorA = 0
+		denominatorB = 0
 		for index, feature in enumerate(fact):
-			in_common += (255 - abs(question[index] - fact[index]))
-			# if question[index] == fact[index] and question[index] < 255:
-			# 	in_common += 255
-		scores.append(in_common)
+			numerator += question[index] * fact[index]
+			denominatorA += question[index] * question[index]
+			denominatorB += fact[index] * fact[index]
+		
+		if denominatorA and denominatorB:
+			total_score = numerator / (math.sqrt(denominatorA) * math.sqrt(denominatorB))
+		else:
+			total_score = 0
+
+		scores.append(total_score)
 		
 	#print scores
 	max_score = 0
