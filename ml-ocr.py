@@ -83,7 +83,7 @@ def test_knowledge(knowledge, question):
 	
 	answer_info = knowledge[max_score_spot]
 	answer = answer_info[0]
-	return answer
+	return answer, max_score
 
 
 def start_batch_mode(knowledge, directory, batch_filter=".png"):
@@ -96,27 +96,27 @@ def start_batch_mode(knowledge, directory, batch_filter=".png"):
 			question_info = read_image(full_filename)
 			question = question_info[1]
 			if question:
-				answer = test_knowledge(knowledge, question)
+				answer, answer_score = test_knowledge(knowledge, question)
 				#print filename, "\t=>", answer
 				image_name = os.path.splitext(os.path.basename(filename))[0]
 				letter_cased, number = image_name.split('-')
 				letter, letter_case = image_name.split('_')
 				if answer == letter:
 					answer_correct_count += 1
-					#print "\033[92m" + letter, number, "\t=>", answer + "\033[0m"
+					print "\033[92m" + letter, number, "\t=>", answer+ " (" + str(answer_score) + ") \033[0m"
 				else:
 					if answer.lower() == letter.lower():
 						answer_close_count += 1
-						#print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+						print "\033[93m" + letter, number, "\t=>", answer + " (" + str(answer_score) + ") \033[0m"
 					elif (answer == '0' or answer == 'O' or answer == 'o') and (letter == '0' or letter == 'O' or letter == 'o'):
 						answer_close_count += 1
-						#print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+						print "\033[93m" + letter, number, "\t=>", answer + " (" + str(answer_score) + ") \033[0m"
 					elif (answer == '1' or answer == 'I' or answer == 'l') and (letter == '1' or letter == 'I' or letter == 'l'):
 						answer_close_count += 1
-						#print "\033[93m" + letter, number, "\t=>", answer + "\033[0m"
+						print "\033[93m" + letter, number, "\t=>", answer + " (" + str(answer_score) + ") \033[0m"
 					else:
 						answer_wrong_count += 1
-						print "\033[91m" + letter, number, "\t=>", answer + "\033[0m"
+						print "\033[91m" + letter, number, "\t=>", answer + " (" + str(answer_score) + ") \033[0m"
 
 	answer_total = float(answer_correct_count + answer_close_count + answer_wrong_count)
 	
