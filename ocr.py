@@ -7,6 +7,46 @@ import math
 from PIL import Image
 
 
+def find_crop_left(image, width, height, depth):
+	found_fg_start = False
+	for i in range(width):
+		for j in range(height):
+			if image.getpixel((i,j)) >= depth:
+				found_fg_start = True
+				return i
+	return 0
+
+
+def find_crop_right(image, width, height, depth):
+	found_fg_start = False
+	for i in range(width-1,0,-1):
+		for j in range(height):
+			if image.getpixel((i,j)) >= depth:
+				found_fg_start = True
+				return i
+	return width
+
+
+def find_crop_top(image, width, height, depth):
+	found_fg_start = False
+	for j in range(height):
+		for i in range(width):
+			if image.getpixel((i,j)) >= depth:
+				found_fg_start = True
+				return j
+	return 0
+
+
+def find_crop_bottom(image, width, height, depth):
+	found_fg_start = False
+	for j in range(height-1,0,-1):
+		for i in range(width):
+			if image.getpixel((i,j)) >= depth:
+				found_fg_start = True
+				return j
+	return height
+
+
 def read_image(filename):
 	if not os.path.exists(filename):
 		return 0, []
@@ -33,6 +73,12 @@ def read_image(filename):
 
 	image_name = os.path.splitext(os.path.basename(filename))[0]
 	letter, letter_case = image_name.split('_')
+
+	if letter == "x1":
+		letter = '.'
+	if letter == "x2":
+		letter = ','
+
 	return letter, png_array
 
 
@@ -113,8 +159,18 @@ def size_character(eigen_image, target_file):
 				col = 0
 			tmp_image.putpixel((col, row), int(eigen_image[row][col]))
 			col += 1
+	
+	# png_image = tmp_image.resize((32, 32))
 
-	png_image = tmp_image.resize((32, 32))
+	image_size_work = 64
+	image_size_final = 32
+	image_depth = 128
+	x_left = find_crop_left(tmp_image, width, height, image_depth)
+	x_right = find_crop_right(tmp_image, width, height, image_depth)
+	y_top = find_crop_top(tmp_image, width, height, image_depth)
+	y_bottom = find_crop_bottom(tmp_image, width, height, image_depth)
+	new_image = tmp_image.crop((x_left, y_top, x_right+1, y_bottom+1))
+	png_image = new_image.resize((32, 32))
 
 	png_array = [0 for i in xrange(32 * 32)]
 	png_image.save(target_file)
@@ -160,6 +216,7 @@ def split_characters(text_row, threshhold, row_index):
 
 	text_cols = []
 	blank_col = True
+	space_cols = 0
 	for col in xrange(0, column_count):
 		pixel_col = []
 
@@ -169,10 +226,17 @@ def split_characters(text_row, threshhold, row_index):
 			pixel_col.append(text_row[row][col])
 
 		if not blank_col:
+			if space_cols > 8:
+				characters.append([''])
+			elif space_cols > 4:
+				characters.append([' '])
+
 			text_cols.append(pixel_col)
 			blank_col = True
+			space_cols = 0
 			
 		else:
+			space_cols += 1
 			if len(text_cols):
 				#characters.append(unwrap_image(text_cols))
 				
@@ -249,10 +313,14 @@ def start_ocr(knowledge, text_image):
 		return 0
 
 	letters = read_and_split(text_image)
+	result = ""
 	for letter in letters:
-		answer, max_score = test_knowledge(knowledge, letter)
-		print answer,
-
+		if len(letter) > 2:
+			answer, max_score = test_knowledge(knowledge, letter)
+			result += answer
+		else:
+			result += letter[0]
+	print result
 
 
 if __name__ == "__main__":
