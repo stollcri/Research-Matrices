@@ -6,6 +6,10 @@ import os
 import math
 from PIL import Image
 
+"""
+To run:
+	rm ./out/img* && ./ocr.py ./out/ ./img/RightsOfManB.png
+"""
 
 def find_crop_left(image, width, height, depth):
 	found_fg_start = False
