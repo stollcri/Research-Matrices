@@ -54,13 +54,17 @@ def center_eigen(eigen_images):
 
 	eigen_means = [0 for i in xrange(image_size)]
 
+	# Get the mean image (Ψ), step 1 sum
 	for image in eigen_images:
 		for index, pixel in enumerate(image):
+			# TODO: overflow prevention?
 			eigen_means[index] += pixel
 	
+	# Get the mean image (Ψ), step 2 divide
 	for i in xrange(len(eigen_means)):
 		eigen_means[i] = eigen_means[i] / image_count
 
+	# # Get the difference from the mean (Φ)
 	# for i in xrange(image_count):
 	# 	for j in xrange(image_size):
 	# 		eigen_images[i][j] = eigen_images[i][j] - eigen_means[j]
