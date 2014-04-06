@@ -95,7 +95,7 @@ train_set_test := $(foreach i,A,tst-$i)
 train_test: ${train_set_test};
 .PHONY: ${train_set_test}
 ${train_set_test}: tst-%:
-	./eigenimage.py ./out/$i_l.png ./img/train-png/$i_l-*.png
+	./eigenimage.py ./out/$i_u.png ./img/train-png/$i_u-*.png
 
 train_set_u := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,tsu-$i)
 train_u: ${train_set_u};
