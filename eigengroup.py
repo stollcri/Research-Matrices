@@ -90,21 +90,23 @@ def add_to_bin(bins, item_a, item_b):
 	bin_found = False
 
 	for x in xrange(0, bin_count):
-		if bin_found:
+		if bins[x][0] == -1:
+			if not bin_found:
+				bins[x][0] = item_a
+				bins[x][1] = item_b
+				bin_found = True
 			break
 
 		for y in xrange(0, bin_count):
 			if bins[x][y] == -1:
 				if bin_found:
 					bins[x][y] = unbined
-				else:
-					if y == 0:
-						bins[x][y] = item_a
-						bins[x][y+1] = item_b
-						bin_found = True
 				break
 
 			if bins[x][y] == item_a or bins[x][y] == item_b:
+				if bin_found:
+					break
+
 				bin_found = True
 				if bins[x][y] == item_a:
 					unbined = item_b
@@ -124,30 +126,29 @@ def show_eigen_groups(eigen_images, eigen_files):
 	bins = [[-1 for j in xrange(width)] for i in xrange(width)]
 
 	for x in xrange(0, width):
-		esum = 0
-		#print eigen_files[x].split('_')[0],
-		for y in xrange(0, width):
-			esum += scores[x][y]
+		print eigen_files[x].split('_')[0], ':',
+		for y in xrange(x, width):
 			if scores[x][y] > 99:
 				pass
-			elif scores[x][y] > 80:
+			elif scores[x][y] > 84:
 				add_to_bin(bins, eigen_files[x].split('_')[0], eigen_files[y].split('_')[0])
-				#print eigen_files[y].split('_')[0], #scores[x][y],
-		print eigen_files[x].split('_')[0], esum
+				print eigen_files[y].split('_')[0], #scores[x][y],
+		print
+		# print eigen_files[x].split('_')[0]
 
-	# bin_count = len(bins)
-	# print
-	# for x in xrange(0, bin_count):
-	# 	if bins[x][0] == -1:
-	# 		break
+	bin_count = len(bins)
+	print
+	for x in xrange(0, bin_count):
+		if bins[x][0] == -1:
+			break
 
-	# 	for y in xrange(0, bin_count):
-	# 		if bins[x][y] == -1:
-	# 			break
-	# 		else:
-	# 			print bins[x][y],
-	# 	print
-	# 	print
+		for y in xrange(0, bin_count):
+			if bins[x][y] == -1:
+				break
+			else:
+				print bins[x][y],
+		print
+		print
 
 
 def create_eigenimage(source_directory):
