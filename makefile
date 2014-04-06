@@ -95,25 +95,25 @@ train_set_test := $(foreach i,A,tst-$i)
 train_test: ${train_set_test};
 .PHONY: ${train_set_test}
 ${train_set_test}: tst-%:
-	./eigenimage.py ./out/$i_u.png ./img/train-png/$i_u-*.png
+	./mean.py ./out/$i_u.png ./img/train-png/$i_u-*.png
 
 train_set_u := $(foreach i,A B C D E F G H I J K L M N O P Q R S T U V W X Y Z,tsu-$i)
 train_u: ${train_set_u};
 .PHONY: ${train_set_u}
 ${train_set_u}: tsu-%:
-	./eigenimage.py ./out/$i_u.png ./img/train-png/$i_u-*.png
+	./mean.py ./out/$i_u.png ./img/train-png/$i_u-*.png
 
 train_set_l := $(foreach i,a b c d e f g h i j k l m n o p q r s t u v w x y z,tsl-$i)
 train_l: ${train_set_l};
 .PHONY: ${train_set_l}
 ${train_set_l}: tsl-%:
-	./eigenimage.py ./out/$i_l.png ./img/train-png/$i_l-*.png
+	./mean.py ./out/$i_l.png ./img/train-png/$i_l-*.png
 
 train_set_n := $(foreach i,0 1 2 3 4 5 6 7 8 9,tsn-$i)
 train_n: ${train_set_n};
 .PHONY: ${train_set_n}
 ${train_set_n}: tsn-%:
-	./eigenimage.py ./out/$i_n.png ./img/train-png/$i_n-*.png
+	./mean.py ./out/$i_n.png ./img/train-png/$i_n-*.png
 
 
 .PHONY: test
