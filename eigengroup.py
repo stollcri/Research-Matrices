@@ -130,7 +130,7 @@ def show_eigen_groups(eigen_images, eigen_files):
 		for y in xrange(x, width):
 			if scores[x][y] > 99:
 				pass
-			elif scores[x][y] > 84:
+			elif scores[x][y] > 80:
 				add_to_bin(bins, eigen_files[x].split('_')[0], eigen_files[y].split('_')[0])
 				print eigen_files[y].split('_')[0], #scores[x][y],
 		print
