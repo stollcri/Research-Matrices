@@ -93,8 +93,11 @@ def center_eigen(eigen_images):
 	# s, u = numpy.linalg.eig(L)
 	U, s, Vt = numpy.linalg.svd(A, full_matrices=True)
 
-	klimit = get_k_limit(s)
-	print klimit
+	klimit = min(16, get_k_limit(s))
+	print "A.shape", A.shape
+	print "A.shape[0]", A.shape[0]
+	print "s.shape", s.shape
+	print "klimit", klimit
 	i = 0
 	for t in numpy.nditer(s, op_flags=["readwrite"]):
 		if i > klimit:
@@ -108,16 +111,50 @@ def center_eigen(eigen_images):
 		zeros[:S.shape[0], :S.shape[1]] = S
 		S = zeros
 
-	I = numpy.dot(numpy.dot(U, S), Vt)
+	scores = U*S
+	facespace = Vt[:klimit]
+	print facespace.shape
+
+	for z in xrange(0, klimit):
+		row = facespace[z]
+		height, width = row.shape
+		eigenimage = [0 for i in xrange(width)]
+		col_max = -999999
+		col_min = 999999
+		for i in range(width):
+			col = row[0, i]
+			eigenimage[i] = col
+			# print eigenimage[i]
+			if col < col_min:
+				col_min = col
+			if col > col_max:
+				col_max = col
+
+		col_shift = col_min * -1
+		col_range = col_max - col_min
+		col_scale = 255 / col_range
+		for i in xrange(0, width):
+			eigenimage[i] += col_shift
+			eigenimage[i] = int(round(eigenimage[i] * col_scale))
+		#write_image_to_file(eigenimage, "./out/_TEST_"+str(z)+".png")
+
+	# print numpy.asarray(facespace).reshape(-1)
+	return numpy.asarray(facespace).reshape(-1)
+
+
+
+	# I = numpy.dot(numpy.dot(U, S), Vt)
+	I = numpy.dot(A, Vt)
+	print I
 
 	# print s
 	# print U
-	print U.shape
-	print S.shape
-	print Vt.shape
-	print I.shape
+	print "U.shape", U.shape
+	# print "S.shape", S.shape
+	print "Vt.shape", Vt.shape
+	print "I.shape", I.shape
 
-	height, width = I.shape
+	height, width = A.shape
 	eigenimage = [0 for i in xrange(width)]
 	col_max = 0
 	col_min = 999999
@@ -138,8 +175,10 @@ def center_eigen(eigen_images):
 		for i in xrange(0, width):
 			eigenimage[i] += col_shift
 			eigenimage[i] = int(round(eigenimage[i] * col_scale))
-		# write_image_to_file(eigenimage, "./out/A__"+str(n)+".png")
+		write_image_to_file(eigenimage, "./out/_TEST_"+str(n)+".png")
 		n += 1
+
+		break
 
 	# col_shift = col_min * -1
 	# col_range = col_max - col_min
