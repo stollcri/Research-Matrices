@@ -84,6 +84,7 @@ def center_eigen(eigen_images):
 	# Get the mean image (Ψ), step 2 divide
 	for i in xrange(len(eigen_means)):
 		eigen_means[i] = eigen_means[i] / image_count
+	write_image_to_file(eigen_means, "./out/_TEST_AVG.png")
 
 	# Get the difference from the mean (Φ) = Φ=Γ−Ψ
 	for i in xrange(image_count):
@@ -95,11 +96,34 @@ def center_eigen(eigen_images):
 
 def create_eigenspace(eigen_images):
 	A = numpy.asmatrix(eigen_images)
-	U, s, Vt = numpy.linalg.svd(A, full_matrices=True)
+	At = A.transpose()
+	
+	# covariance matrix
+	C = A * At
+	print "A", A.shape
+	print "At", At.shape
+	print "C", C.shape
 
-	# klimit = max(256, get_k_limit(s))
+	# get eigen vectors
+	U, s, Vt = numpy.linalg.svd(C, full_matrices=True)
+
+	print "U", U.shape
+	# project faces onto eigenvectors
+	imagespace=numpy.dot(At,U)
+	imagespace=imagespace.transpose()
+	print "imagespace", imagespace.shape
+
+	# TODO: FIXUP this area
+	img_width = int(math.sqrt(len(eigen_images[0])))
+	for i in range(len(eigen_images)):
+		ui=imagespace[i]
+		ui.shape=(img_width,img_width)
+		norm=numpy.trace(numpy.dot(ui.transpose(), ui))            
+		imagespace[i]=imagespace[i]/norm 
+
+	# klimit = min(256, get_k_limit(s))
 	klimit = get_k_limit(s)
-	print klimit
+	print "klimit", klimit
 	# i = 0
 	# for t in numpy.nditer(s, op_flags=["readwrite"]):
 	# 	if i > klimit:
@@ -114,38 +138,54 @@ def create_eigenspace(eigen_images):
 	# 	S = zeros
 
 	# scores = U*S
-	facespace = Vt[:klimit]
-	print facespace.shape
-	return facespace, klimit
+	imagespace = imagespace[:klimit]
+	print "imagespace", imagespace.shape
+	return imagespace, klimit, s
 
 
-def write_eigenimages(facespace, klimit):
-	row = facespace[0]
+def write_eigenimages(imagespace, klimit, filename_postfix='0'):
+	# each individual eigen face
+	# write_eigenimages_all(imagespace, klimit, filename_postfix)
+	# all the eigenfaces together
+	write_eigenimages_one(imagespace, klimit, filename_postfix)
+
+def write_eigenimages_all(imagespace, klimit, filename_postfix='0'):
+	for z in xrange(0, klimit):
+		row = imagespace[z]
+		height, width = row.shape
+		eigenimage = [0 for i in xrange(width)]
+		col_max = -999999
+		col_min = 999999
+		for i in range(width):
+			col = row[0, i]
+			eigenimage[i] = col
+			# print eigenimage[i]
+			if col < col_min:
+				col_min = col
+			if col > col_max:
+				col_max = col
+
+		col_shift = col_min * -1
+		col_range = col_max - col_min
+		col_scale = 255 / col_range
+		for i in xrange(0, width):
+			eigenimage[i] += col_shift
+			eigenimage[i] = int(round(eigenimage[i] * col_scale))
+		write_image_to_file(eigenimage, "./out/_TEST_"+filename_postfix+".png")
+
+	return numpy.asarray(imagespace).reshape(-1)
+
+
+def write_eigenimages_one(imagespace, klimit, filename_postfix='0'):
+	row = imagespace[0]
 	height, width = row.shape
 	eigenimage = [0 for i in xrange(width)]
 
 	for z in xrange(0, klimit):
-		row = facespace[z]
-		# height, width = row.shape
-		# eigenimage = [0 for i in xrange(width)]
-		# col_max = -999999
-		# col_min = 999999
+		row = imagespace[z]
 		for i in range(width):
 			col = row[0, i]
 			eigenimage[i] += col
-		# 	# print eigenimage[i]
-		# 	if col < col_min:
-		# 		col_min = col
-		# 	if col > col_max:
-		# 		col_max = col
-
-		# col_shift = col_min * -1
-		# col_range = col_max - col_min
-		# col_scale = 255 / col_range
-		# for i in xrange(0, width):
-		# 	eigenimage[i] += col_shift
-		# 	eigenimage[i] = int(round(eigenimage[i] * col_scale))
-		# write_image_to_file(eigenimage, "./out/_TEST_"+str(z)+".png")
 
 	col_max = -999999
 	col_min = 999999
@@ -166,49 +206,74 @@ def write_eigenimages(facespace, klimit):
 	for i in xrange(0, width):
 		eigenimage[i] += col_shift
 		eigenimage[i] = int(round(eigenimage[i] * col_scale))
-	write_image_to_file(eigenimage, "./out/_TEST_"+str(z)+".png")
+	write_image_to_file(eigenimage, "./out/_TEST_"+filename_postfix+".png")
 
-	# print numpy.asarray(facespace).reshape(-1)
-	return numpy.asarray(facespace).reshape(-1)
+	# print numpy.asarray(imagespace).reshape(-1)
+	return numpy.asarray(imagespace).reshape(-1)
 
 
-def test_one(means, facespace, klimit):
-	# test_img_name = "./img/train-png/0_n-93.png"
-	# test_img_name = "./img/train-png/0_n-102.png"
-	# test_img_name = "./img/train-png/3_n-121.png"
+def test_one(means, imagespace, klimit, eigen_values):
+	test_img_name = "./img/train-png/0_n-93.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "0-93")
+
+	test_img_name = "./img/train-png/0_n-102.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "0-102")
+
+	test_img_name = "./img/train-png/3_n-121.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "3-121")
+
 	test_img_name = "./img/train-png/A_u-122.png"
-	# test_img_name = "./img/train-png/C_u-58.png"
-	# test_img_name = "./img/train-png/D_u-103.png"
-	# test_img_name = "./img/train-png/E_u-28.png"
-	# test_img_name = "./img/train-png/m_l-77.png"
-	# test_img_name = "./img/train-png/O_u-9.png"
-	# test_img_name = "./img/train-png/Q_u-6.png"
-	# test_img_name = "./img/train-png/s_l-9.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "A-122")
+
+	test_img_name = "./img/train-png/C_u-58.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "C-58")
+
+	test_img_name = "./img/train-png/D_u-103.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "D-103")
+
+	test_img_name = "./img/train-png/E_u-28.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "E-28")
+
+	test_img_name = "./img/train-png/m_l-77.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "m-77")
+
+	test_img_name = "./img/train-png/O_u-9.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "O-9")
+
+	test_img_name = "./img/train-png/Q_u-6.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "q-6")
+
+	test_img_name = "./img/train-png/s_l-9.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "s-9")
+
+
+def test_one_go(means, imagespace, klimit, test_img_name, eigen_values, filename_postfix='0'):
 	test_img = add_to_matrix_from_file(test_img_name)
 	test_array = numpy.array(test_img)
 	weights = []
 	for x in xrange(0, klimit):
-		eigen_vector = facespace[x].transpose()
-		# print "test_array", test_array
-		# print "eigen_vector", eigen_vector
+		eigen_vector = imagespace[x].transpose()
+		# print "test_array", test_array.shape, test_array
+		# print "eigen_vector", eigen_vector.shape, eigen_vector
 		# print "dot", numpy.dot(test_array, eigen_vector)[0,0]
 		weights.append(numpy.dot(test_array, eigen_vector)[0,0])
 
 	row = 0
 	col = 0
-	height, width = facespace.shape
-	imagespace = facespace.copy()
+	height, width = imagespace.shape
+	imagespace = imagespace.copy()
 	for x in numpy.nditer(imagespace, op_flags=['readwrite']):
-		x[...] = (x * weights[row]) + means[col]
+		# print row, "/", col, ":", x, weights[row], means[col], ((x * weights[row]) + means[col])
+		x[...] = ((x * weights[row]) * eigen_values[row]) #+ means[col]
 		col += 1
 		if col >= width:
 			row += 1
 			col = 0
 
-	# print facespace
+	# print imagespace
 	# print weights[0], weights[1]
 	# print imagespace
-	write_eigenimages(imagespace, klimit)
+	write_eigenimages(imagespace, klimit, filename_postfix)
 
 
 def write_image_to_file(eigen_image, target_file):
@@ -238,9 +303,9 @@ def create_eigenimage(source_directory):
 	"""
 	eigen_images = read_images(source_directory)
 	eigen_images_mean, eigen_means = center_eigen(eigen_images)
-	face_space, k_limit = create_eigenspace(eigen_images_mean)
+	face_space, k_limit, eigen_values = create_eigenspace(eigen_images_mean)
 	# write_eigenimages(face_space, k_limit)
-	test_one(eigen_means, face_space, k_limit)
+	test_one(eigen_means, face_space, k_limit, eigen_values)
 
 
 """
