@@ -36,7 +36,6 @@ def read_images(source_directory):
 	filenames = []
 	eigen_images = []
 	dirname = source_directory[0]
-	print dirname
 	if os.path.isdir(dirname):
 		for filename in os.listdir(dirname):
 			if filename[0] != '.':
