@@ -56,9 +56,10 @@ def read_images(source_directory):
 	dirname = source_directory[0]
 	if os.path.isdir(dirname):
 		for filename in os.listdir(dirname):
-			if os.path.exists(os.path.join(dirname, filename)):
-				image_as_vector = add_to_matrix_from_file(os.path.join(dirname, filename))
-				eigen_images.append(image_as_vector[:])
+			if filename[0] != '.':
+				if os.path.exists(os.path.join(dirname, filename)):
+					image_as_vector = add_to_matrix_from_file(os.path.join(dirname, filename))
+					eigen_images.append(image_as_vector[:])
 	else:
 		for filename in source_directory:
 			if os.path.exists(filename):
