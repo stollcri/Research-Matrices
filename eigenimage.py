@@ -9,15 +9,17 @@ from PIL import Image
 
 
 def get_k_limit(sigma):
-	klimit = 8
+	klimit = 0
 	last_eigenvalue = 0
 	eigenvalues = numpy.nditer(sigma, flags=['f_index'])
 	while not eigenvalues.finished:
+		klimit += 1
 		if eigenvalues.index > 4:
 			if last_eigenvalue:
 				if (eigenvalues[0] * 10) < last_eigenvalue:
 					klimit = eigenvalues.index - 1
 					break
+		# print last_eigenvalue, eigenvalues[0]
 		last_eigenvalue = eigenvalues[0]
 		eigenvalues.iternext()
 
