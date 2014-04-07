@@ -7,6 +7,9 @@ import math
 import numpy
 from PIL import Image
 
+"""
+	./eigenimage.py ./img/train-png/*-[123]*.png
+"""
 
 def get_k_limit(sigma):
 	klimit = 0
