@@ -90,114 +90,125 @@ def center_eigen(eigen_images):
 		for j in xrange(image_size):
 			eigen_images[i][j] = eigen_images[i][j] - eigen_means[j]
 
+	return eigen_images, eigen_means
+
+
+def create_eigenspace(eigen_images):
 	A = numpy.asmatrix(eigen_images)
-	# At = A.transpose()
-	# L = A * At
-	# s, u = numpy.linalg.eig(L)
 	U, s, Vt = numpy.linalg.svd(A, full_matrices=True)
 
-	klimit = min(16, get_k_limit(s))
-	print "A.shape", A.shape
-	print "A.shape[0]", A.shape[0]
-	print "s.shape", s.shape
-	print "klimit", klimit
-	i = 0
-	for t in numpy.nditer(s, op_flags=["readwrite"]):
-		if i > klimit:
-			t[...] = 0
-		i += 1
-	S = numpy.diag(s)
-	musm, musn = U.shape
-	mvsm, mvsn = Vt.shape
-	if musn != mvsm:
-		zeros = numpy.zeros((musn, mvsm), dtype=numpy.int32)
-		zeros[:S.shape[0], :S.shape[1]] = S
-		S = zeros
+	# klimit = max(256, get_k_limit(s))
+	klimit = get_k_limit(s)
+	print klimit
+	# i = 0
+	# for t in numpy.nditer(s, op_flags=["readwrite"]):
+	# 	if i > klimit:
+	# 		t[...] = 0
+	# 	i += 1
+	# S = numpy.diag(s)
+	# musm, musn = U.shape
+	# mvsm, mvsn = Vt.shape
+	# if musn != mvsm:
+	# 	zeros = numpy.zeros((musn, mvsm), dtype=numpy.int32)
+	# 	zeros[:S.shape[0], :S.shape[1]] = S
+	# 	S = zeros
 
-	scores = U*S
+	# scores = U*S
 	facespace = Vt[:klimit]
 	print facespace.shape
+	return facespace, klimit
+
+
+def write_eigenimages(facespace, klimit):
+	row = facespace[0]
+	height, width = row.shape
+	eigenimage = [0 for i in xrange(width)]
 
 	for z in xrange(0, klimit):
 		row = facespace[z]
-		height, width = row.shape
-		eigenimage = [0 for i in xrange(width)]
-		col_max = -999999
-		col_min = 999999
+		# height, width = row.shape
+		# eigenimage = [0 for i in xrange(width)]
+		# col_max = -999999
+		# col_min = 999999
 		for i in range(width):
 			col = row[0, i]
-			eigenimage[i] = col
-			# print eigenimage[i]
-			if col < col_min:
-				col_min = col
-			if col > col_max:
-				col_max = col
+			eigenimage[i] += col
+		# 	# print eigenimage[i]
+		# 	if col < col_min:
+		# 		col_min = col
+		# 	if col > col_max:
+		# 		col_max = col
 
-		col_shift = col_min * -1
-		col_range = col_max - col_min
-		col_scale = 255 / col_range
-		for i in xrange(0, width):
-			eigenimage[i] += col_shift
-			eigenimage[i] = int(round(eigenimage[i] * col_scale))
-		#write_image_to_file(eigenimage, "./out/_TEST_"+str(z)+".png")
+		# col_shift = col_min * -1
+		# col_range = col_max - col_min
+		# col_scale = 255 / col_range
+		# for i in xrange(0, width):
+		# 	eigenimage[i] += col_shift
+		# 	eigenimage[i] = int(round(eigenimage[i] * col_scale))
+		# write_image_to_file(eigenimage, "./out/_TEST_"+str(z)+".png")
+
+	col_max = -999999
+	col_min = 999999
+	for i in xrange(0, width):
+		col = eigenimage[i]
+		# print eigenimage[i]
+		if col < col_min:
+			col_min = col
+		if col > col_max:
+			col_max = col
+
+	col_shift = col_min * -1
+	col_range = col_max - col_min
+	col_scale = 255 / col_range
+	# print col_shift, col_range, col_scale
+	# print col_min, col_min+col_shift, int(round((col_min+col_shift) * col_scale))
+	# print col_max, col_max+col_shift, int(round((col_max+col_shift) * col_scale))
+	for i in xrange(0, width):
+		eigenimage[i] += col_shift
+		eigenimage[i] = int(round(eigenimage[i] * col_scale))
+	write_image_to_file(eigenimage, "./out/_TEST_"+str(z)+".png")
 
 	# print numpy.asarray(facespace).reshape(-1)
 	return numpy.asarray(facespace).reshape(-1)
 
 
+def test_one(means, facespace, klimit):
+	# test_img_name = "./img/train-png/0_n-93.png"
+	# test_img_name = "./img/train-png/0_n-102.png"
+	# test_img_name = "./img/train-png/3_n-121.png"
+	test_img_name = "./img/train-png/A_u-122.png"
+	# test_img_name = "./img/train-png/C_u-58.png"
+	# test_img_name = "./img/train-png/D_u-103.png"
+	# test_img_name = "./img/train-png/E_u-28.png"
+	# test_img_name = "./img/train-png/m_l-77.png"
+	# test_img_name = "./img/train-png/O_u-9.png"
+	# test_img_name = "./img/train-png/Q_u-6.png"
+	# test_img_name = "./img/train-png/s_l-9.png"
+	test_img = add_to_matrix_from_file(test_img_name)
+	test_array = numpy.array(test_img)
+	weights = []
+	for x in xrange(0, klimit):
+		eigen_vector = facespace[x].transpose()
+		# print "test_array", test_array
+		# print "eigen_vector", eigen_vector
+		# print "dot", numpy.dot(test_array, eigen_vector)[0,0]
+		weights.append(numpy.dot(test_array, eigen_vector)[0,0])
 
-	# I = numpy.dot(numpy.dot(U, S), Vt)
-	I = numpy.dot(A, Vt)
-	print I
+	row = 0
+	col = 0
+	height, width = facespace.shape
+	imagespace = facespace.copy()
+	for x in numpy.nditer(imagespace, op_flags=['readwrite']):
+		x[...] = (x * weights[row]) + means[col]
+		col += 1
+		if col >= width:
+			row += 1
+			col = 0
 
-	# print s
-	# print U
-	print "U.shape", U.shape
-	# print "S.shape", S.shape
-	print "Vt.shape", Vt.shape
-	print "I.shape", I.shape
-
-	height, width = A.shape
-	eigenimage = [0 for i in xrange(width)]
-	col_max = 0
-	col_min = 999999
-	n = 0
-	for row in I:
-		for i in range(row.shape[-1]):
-			col = row[...,i][0, 0]
-			eigenimage[i] = col
-			# print col, eigenimage[i], 
-			if col < col_min:
-				col_min = col
-			if col > col_max:
-				col_max = col
-
-		col_shift = col_min * -1
-		col_range = col_max - col_min
-		col_scale = 255 / col_range
-		for i in xrange(0, width):
-			eigenimage[i] += col_shift
-			eigenimage[i] = int(round(eigenimage[i] * col_scale))
-		write_image_to_file(eigenimage, "./out/_TEST_"+str(n)+".png")
-		n += 1
-
-		break
-
-	# col_shift = col_min * -1
-	# col_range = col_max - col_min
-	# col_scale = 255 / col_range
-	# print col_min, col_max, col_shift, col_range, col_scale
-	# print (col_min + col_shift), round((col_min + col_shift) * col_scale)
-	# print (col_max + col_shift), round((col_max + col_shift) * col_scale)
-
-	# for i in xrange(0, width):
-	# 	eigenimage[i] += col_shift
-	# 	eigenimage[i] = int(round(eigenimage[i] * col_scale))
-	# 	pass
-	# print
-
-	# return eigenimage
-	return eigen_means
+	# print facespace
+	# print weights[0], weights[1]
+	# print imagespace
+	write_eigenimages(imagespace, klimit)
 
 
 def write_image_to_file(eigen_image, target_file):
@@ -220,14 +231,16 @@ def write_image_to_file(eigen_image, target_file):
 	png_image.save(target_file)
 
 
-def create_eigenimage(source_directory, target_file):
+def create_eigenimage(source_directory):
 	"""
 	Read from file provided on the command line or from stdin
 	then save uncompressed representations of the SVD compressed version
 	"""
 	eigen_images = read_images(source_directory)
-	eigen_images_average = center_eigen(eigen_images)
-	write_image_to_file(eigen_images_average, target_file)
+	eigen_images_mean, eigen_means = center_eigen(eigen_images)
+	face_space, k_limit = create_eigenspace(eigen_images_mean)
+	# write_eigenimages(face_space, k_limit)
+	test_one(eigen_means, face_space, k_limit)
 
 
 """
@@ -241,11 +254,10 @@ def create_eigenimage(source_directory, target_file):
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
-	parser.add_argument("eigenimage", help="The desintation PNG file", type=argparse.FileType('w'))
 	parser.add_argument('sourcedirectory', help="Where to store the image files", nargs='+')
 	args = parser.parse_args()
 
 	try:
-		create_eigenimage(args.sourcedirectory, args.eigenimage)
+		create_eigenimage(args.sourcedirectory)
 	except KeyboardInterrupt:
 		exit(0)
