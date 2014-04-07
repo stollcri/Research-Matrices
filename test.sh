@@ -1,0 +1,29 @@
+#!/bin/sh
+
+./eigenimage.py ./out/_069aBcCDegGnoOQuU.png ./img/train-png/[069aBcCDegGnoOQuU]_*.png
+./eigenimage.py ./out/_1IjJl.png ./img/train-png/[1IjJl]_*.png
+./eigenimage.py ./out/_2z.png ./img/train-png/[2z]_*.png
+./eigenimage.py ./out/_358aBJsS.png ./img/train-png/[358aBJsS]_*.png
+./eigenimage.py ./out/_68abBcCdeGoOs.png ./img/train-png/[68abBcCdeGoOs]_*.png
+./eigenimage.py ./out/_7z.png ./img/train-png/[7z]_*.png
+./eigenimage.py ./out/_9DgoqQ.png ./img/train-png/[9DgoqQ]_*.png
+./eigenimage.py ./out/_aBdDegJnoRsu.png ./img/train-png/[aBdDegJnoRsu]_*.png
+./eigenimage.py ./out/_bBhuU.png ./img/train-png/[bBhuU]_*.png
+./eigenimage.py ./out/_BDeEgGHnoPRsSu.png ./img/train-png/[BDeEgGHnoPRsSu]_*.png
+./eigenimage.py ./out/_EFLR.png ./img/train-png/[EFLR]_*.png
+./eigenimage.py ./out/_fIlt.png ./img/train-png/[fIlt]_*.png
+./eigenimage.py ./out/_FPrR.png ./img/train-png/[FPrR]_*.png
+./eigenimage.py ./out/_gGnopqsuU.png ./img/train-png/[gGnopqsuU]_*.png
+./eigenimage.py ./out/_HMnNRuU.png ./img/train-png/[HMnNRuU]_*.png
+./eigenimage.py ./out/_iIl.png ./img/train-png/[iIl]_*.png
+./eigenimage.py ./out/_kKR.png ./img/train-png/[kKR]_*.png
+./eigenimage.py ./out/_vVy.png ./img/train-png/[vVy]_*.png
+./eigenimage.py ./out/_xX.png ./img/train-png/[xX]_*.png
+./eigenimage.py ./out/_yY.png ./img/train-png/[yY]_*.png
+./eigenimage.py ./out/_zZ.png ./img/train-png/[zZ]_*.png
+./eigenimage.py ./out/_4.png ./img/train-png/[4]_*.png
+./eigenimage.py ./out/_A.png ./img/train-png/[A]_*.png
+./eigenimage.py ./out/_m.png ./img/train-png/[m]_*.png
+./eigenimage.py ./out/_T.png ./img/train-png/[T]_*.png
+./eigenimage.py ./out/_w.png ./img/train-png/[w]_*.png
+./eigenimage.py ./out/_W.png ./img/train-png/[W]_*.png
