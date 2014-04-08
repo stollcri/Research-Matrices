@@ -172,17 +172,17 @@ def size_character(eigen_image, target_file):
 			col += 1
 	
 	# png_image = tmp_image.resize((32, 32))
-	image_size_work = 64
-	image_size_final = 32
 	image_depth = 128
 	x_left = find_crop_left(tmp_image, width, height, image_depth)
 	x_right = find_crop_right(tmp_image, width, height, image_depth)
 	y_top = find_crop_top(tmp_image, width, height, image_depth)
 	y_bottom = find_crop_bottom(tmp_image, width, height, image_depth)
 	new_image = tmp_image.crop((x_left, y_top, x_right+1, y_bottom+1))
-	png_image = new_image.resize((32, 32))
+	#png_image = new_image.resize((32, 32))
+	png_image = new_image.resize((16, 16))
 
-	png_array = [0 for i in xrange(32 * 32)]
+	#png_array = [0 for i in xrange(32 * 32)]
+	png_array = [0 for i in xrange(16 * 16)]
 	#
 	# Uncomment to save out the captured characters
 	#

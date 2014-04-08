@@ -40,7 +40,10 @@ def add_to_matrix_from_file(filename):
 		return []
 
 	png_image = Image.open(filename)
-	png_image.thumbnail((32, 32), Image.ANTIALIAS)
+	#
+	# EXPERIMENTS: how does changing the thumbnail size impact OCR
+	#png_image.thumbnail((32, 32), Image.ANTIALIAS)
+	png_image.thumbnail((16, 16), Image.ANTIALIAS)
 
 	col = 0
 	image = []
