@@ -25,6 +25,7 @@ def get_k_limit(sigma):
 					break
 		last_eigenvalue = eigenvalues[0]
 		eigenvalues.iternext()
+	# desired k value per character * number of characters (k8 * 64 characters = 512)
 	if klimit > 512:
 		return 512
 	else:
