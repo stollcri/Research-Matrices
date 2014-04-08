@@ -296,24 +296,26 @@ def create_eigenimage(source_directory):
 	"""
 	eigenspace_pickle = "./out/eigenspace.p"
 	if os.path.exists(eigenspace_pickle):
+		print "Loading values from cache", eigenspace_pickle
 		eigenspace = pickle.load(open(eigenspace_pickle, "rb"))
 		k_limit = eigenspace["k_limit"]
 		image_space = eigenspace["image_space"]
 		eigen_values = eigenspace["eigen_values"]
-		print "image_space", image_space.shape
-		print "k_limit", k_limit
-		print "eigen_values", eigen_values.shape
+		print " image_space", image_space.shape
+		print " k_limit", k_limit
+		print " eigen_values", eigen_values.shape
 	else:
+		print "No chache, generating eigenimagespace"
 		eigen_images = read_images(source_directory)
-		print "rows", len(eigen_images), "cols", len(eigen_images[0])
+		print " rows", len(eigen_images), "cols", len(eigen_images[0])
 
 		eigen_images_mean, eigen_means = center_eigen(eigen_images)
-		print "images", len(eigen_images_mean), "means", len(eigen_means)
+		print " images", len(eigen_images_mean), "means", len(eigen_means)
 		
 		image_space, k_limit, eigen_values = create_eigenspace(eigen_images_mean)
-		print "image_space", image_space.shape
-		print "k_limit", k_limit
-		print "eigen_values", eigen_values.shape
+		print " image_space", image_space.shape
+		print " k_limit", k_limit
+		print " eigen_values", eigen_values.shape
 		eigenspace = {}
 		eigenspace["k_limit"] = k_limit
 		eigenspace["image_space"] = image_space
@@ -322,16 +324,19 @@ def create_eigenimage(source_directory):
 
 	charweight_pickle = "./out/characters.p"
 	if os.path.exists(charweight_pickle):
+		print "Loading values from cache", charweight_pickle
 		character_weights = pickle.load(open(charweight_pickle, "rb"))
 		characters = character_weights["characters"]
 		weights = character_weights["weights"]
 	else:
+		print "No chache, generating all character weights"
 		characters, weights = generate_weights(image_space, k_limit)
 		character_weights = {}
 		character_weights["characters"] = characters
 		character_weights["weights"] = weights
 		pickle.dump(character_weights, open(charweight_pickle, "wb"))
 
+	print "Generating check images"
 	# test the imagespace's ability to reproduce characters
 	# ?
 	test_one_go(image_space, k_limit, "./img/means/003_n.png", eigen_values, filename_postfix="01")
