@@ -285,6 +285,7 @@ def write_eigenimage(imagespace, klimit, filename_postfix='0'):
 	write_image_to_file(eigenimage, "./out/_TEST_"+str(filename_postfix)+".png")
 
 def write_question_image_projected(weights, imagespace, eigen_values, klimit, curchar):
+	print show_time(), "> write_question_image_projected"
 	row = 0
 	col = 0
 	height, width = imagespace.shape
@@ -297,6 +298,7 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 			row += 1
 			col = 0
 	write_eigenimage(new_imagespace, klimit, curchar)
+	print show_time(), "< write_question_image_projected"
 
 def test_knowledge(question, klimit, imagespace, eigen_values, characters, weights, curchar):
 	print show_time(), "> test_knowledge"
