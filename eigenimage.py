@@ -303,6 +303,7 @@ def create_eigenimage(source_directory):
 		eigenspace = pickle.load(open(eigenspace_pickle, "rb"))
 		k_limit = eigenspace["k_limit"]
 		image_space = eigenspace["image_space"]
+		eigen_means = eigenspace["eigen_means"]
 		eigen_values = eigenspace["eigen_values"]
 		print " image_space", image_space.shape
 		print " k_limit", k_limit
@@ -322,6 +323,7 @@ def create_eigenimage(source_directory):
 		eigenspace = {}
 		eigenspace["k_limit"] = k_limit
 		eigenspace["image_space"] = image_space
+		eigenspace["eigen_means"] = eigen_means
 		eigenspace["eigen_values"] = eigen_values
 		pickle.dump(eigenspace, open(eigenspace_pickle, "wb"))
 

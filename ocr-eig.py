@@ -26,6 +26,7 @@ def load_knowledge(eigenspace_pickle, charweight_pickle):
 		eigenspace = pickle.load(open(eigenspace_pickle, "rb"))
 		k_limit = eigenspace["k_limit"]
 		image_space = eigenspace["image_space"]
+		eigen_means = eigenspace["eigen_means"]
 		eigen_values = eigenspace["eigen_values"]
 	else:
 		print "Eigenimagespace file", eigenspace_pickle, "not found."
@@ -40,7 +41,7 @@ def load_knowledge(eigenspace_pickle, charweight_pickle):
 		exit
 
 	print show_time(), "< load_knowledge"
-	return k_limit, image_space, eigen_values, characters, weights
+	return k_limit, image_space, eigen_means, eigen_values, characters, weights
 
 
 def read_and_split(filename):
@@ -300,8 +301,13 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 	write_eigenimage(new_imagespace, klimit, curchar)
 	print show_time(), "< write_question_image_projected"
 
-def test_knowledge(question, klimit, imagespace, eigen_values, characters, weights, curchar):
+def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, characters, weights, curchar):
 	print show_time(), "> test_knowledge"
+
+	# subtract the imagespace mean
+	for index, value in enumerate(question):
+		question[index] = question[index] - eigen_means[index]
+
 	test_array = numpy.array(question)
 	question_weights = []
 	# get the weights for the unseeen image by projecting it down to eigenimagespace
@@ -315,7 +321,7 @@ def test_knowledge(question, klimit, imagespace, eigen_values, characters, weigh
 	#
 	# DEBUG
 	#
-	write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
+	#write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
 
 	# Cosine similarity
 	scores = []
@@ -358,7 +364,7 @@ def test_knowledge(question, klimit, imagespace, eigen_values, characters, weigh
 	return answer, max_score
 
 
-def start_ocr(text_image, k_limit, image_space, eigen_values, characters, weights):
+def start_ocr(text_image, k_limit, image_space, eigen_means, eigen_values, characters, weights):
 	if not os.path.exists(text_image):
 		return 0
 
@@ -367,7 +373,7 @@ def start_ocr(text_image, k_limit, image_space, eigen_values, characters, weight
 	i = 0
 	for letter in letters:
 		if len(letter) > 2:
-			answer, max_score = test_knowledge(letter, k_limit, image_space, eigen_values, characters, weights, i)
+			answer, max_score = test_knowledge(letter, k_limit, image_space, eigen_means, eigen_values, characters, weights, i)
 			result += answer
 		else:
 			result += letter[0]
@@ -381,7 +387,7 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 
 	try:
-		k_limit, image_space, eigen_values, characters, weights = load_knowledge("./out/eigenspace.p", "./out/characters.p")
-		start_ocr(args.textimage.name, k_limit, image_space, eigen_values, characters, weights)
+		k_limit, image_space, eigen_means, eigen_values, characters, weights = load_knowledge("./out/eigenspace.p", "./out/characters.p")
+		start_ocr(args.textimage.name, k_limit, image_space, eigen_means, eigen_values, characters, weights)
 	except KeyboardInterrupt:
 		exit(0)
