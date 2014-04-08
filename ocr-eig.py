@@ -317,6 +317,7 @@ def test_knowledge(question, klimit, imagespace, eigen_values, characters, weigh
 	#
 	write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
 
+	# Cosine similarity
 	scores = []
 	for weight_vector in weights:
 		numerator = 0
@@ -333,6 +334,17 @@ def test_knowledge(question, klimit, imagespace, eigen_values, characters, weigh
 			total_score = 0
 
 		scores.append(total_score)
+
+	# # Euclidian distance
+	# scores = []
+	# pixel_count = len(weights[0])
+	# for weight_vector in weights:
+	# 	score = 0.0
+	# 	for index, feature in enumerate(weight_vector):
+	# 		score += (((question_weights[index] - weight_vector[index]) / pixel_count) * ((question_weights[index] - weight_vector[index]) / pixel_count))
+	# 		total_score = (math.sqrt(score) / klimit)
+	# 	scores.append(total_score)
+	# 	print total_score
 
 	max_score = 0
 	max_score_spot = -1
