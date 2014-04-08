@@ -45,17 +45,45 @@ def find_crop_bottom(image, width, height, depth):
 	return height
 
 
-def gen_filename(outputdirectory, character, index):
-	valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
+def gen_filename(outputdirectory, character_in, index):
+	if character_in == '.':
+		character = '001'
+	elif character_in == ',':
+		character = '002'
+	elif character_in == '?':
+		character = '003'
+	elif character_in == '!':
+		character = '004'
+	elif character_in == '-':
+		character = '005'
+	elif character_in == '_':
+		character = '006'
+	elif character_in == '#':
+		character = '007'
+	elif character_in == '@':
+		character = '008'
+	elif character_in == ';':
+		character = '009'
+	elif character_in == '\'':
+		character = '010'
+	elif character_in == '"':
+		character = '011'
+	else:
+		character = character_in
+
 	if character.isupper():
 		character_case = 'u'
 	elif character.islower():
 		character_case = 'l'
 	else:
 		character_case = 'n'
+
 	dirtyfilename = character + '_' + character_case + '-' + index + ".png"
 	directoryname = outputdirectory + '/'
+
+	valid_chars = "-_.() %s%s" % (string.ascii_letters, string.digits)
 	filename = ''.join(c for c in dirtyfilename if c in valid_chars)
+	
 	return directoryname + filename
 
 

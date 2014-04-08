@@ -57,8 +57,8 @@ svd-avg:
 	./svd-avg.py ./out/avg26.png ./img/train-png/${LETTER_AVG}-27.png ./out/avg27.png ${SVDOPTS_AVG}
 
 
-.PHONY: trainingset trainingset-upper trainingset-lower trainingset-number
-trainingset: trainingset-upper trainingset-lower trainingset-number
+.PHONY: trainingset trainingset-upper trainingset-lower trainingset-number trainingset-punctuation
+trainingset: trainingset-upper trainingset-lower trainingset-number trainingset-punctuation
 
 trainingset-test:
 	@for word in the be to of and in that have it for not on with he as you do at; do \
@@ -88,9 +88,16 @@ trainingset-number:
 	done
 	@echo $@ complete
 
+trainingset-punctuation:
+	@for letter in . , ? \! - _ \# @ \; \' \" ; do \
+		mkdir -p ./img/train-png ; \
+		./gen-train.py $$letter ./img/train-png ; \
+	done
+	@echo $@ complete
 
-.PHONY: train train_u train_l train_n
-train: train_u train_l train_n
+
+.PHONY: train train_u train_l train_n train_p
+train: train_u train_l train_n train_p
 
 i = $(firstword $(subst -, ,$*))
 
@@ -116,6 +123,12 @@ train_set_n := $(foreach i,0 1 2 3 4 5 6 7 8 9,tsn-$i)
 train_n: ${train_set_n};
 .PHONY: ${train_set_n}
 ${train_set_n}: tsn-%:
+	./mean.py ./out/$i_n.png ./img/train-png/$i_n-*.png
+
+train_set_p := $(foreach i,001 002 003 004 005 006 007 008 009 010 011,tsp-$i)
+train_p: ${train_set_p};
+.PHONY: ${train_set_p}
+${train_set_p}: tsp-%:
 	./mean.py ./out/$i_n.png ./img/train-png/$i_n-*.png
 
 

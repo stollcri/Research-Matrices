@@ -98,15 +98,6 @@ def create_eigenimage(source_directory, target_file):
 	write_image_to_file(eigen_images_average, target_file)
 
 
-"""
- TODO: make this work like eigenface (eigenimage) implementations
- 		- Process a group of examples for each letter at once
- 		- Read the images in (as is), but unwrap them as a row in the matrix
- 		- Calculate the mean for each column and subtract it from each row
- 		- Calculate the eigenvectors and eigenvalues of the covariance matrix
- (TODO should be done as a new file, this is a drastic change)
-"""
-
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("eigenimage", help="The desintation PNG file", type=argparse.FileType('w'))
