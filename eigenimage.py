@@ -329,8 +329,18 @@ def create_eigenimage(source_directory):
 		character_weights["weights"] = weights
 		pickle.dump(character_weights, open(charweight_pickle, "wb"))
 
-	# write_eigenimage(image_space, k_limit)
-	#test_one(image_space, k_limit, eigen_values)
+	# test the imagespace's ability to reproduce characters
+	# ?
+	test_one_go(image_space, k_limit, "./img/means/003_n.png", eigen_values, filename_postfix='0')
+	# @
+	test_one_go(image_space, k_limit, "./img/means/008_n.png", eigen_values, filename_postfix='0')
+	# g
+	test_one_go(image_space, k_limit, "./img/means/g_l.png.png", eigen_values, filename_postfix='0')
+	# H
+	test_one_go(image_space, k_limit, "./img/means/H_u.png.png", eigen_values, filename_postfix='0')
+	# Q
+	test_one_go(image_space, k_limit, "./img/means/Q_u.png.png", eigen_values, filename_postfix='0')
+
 
 
 if __name__ == "__main__":
