@@ -87,7 +87,7 @@ def center_eigen(eigen_images):
 	# Get the mean image (Ψ), step 2 divide
 	for i in xrange(len(eigen_means)):
 		eigen_means[i] = eigen_means[i] / image_count
-	write_image_to_file(eigen_means, "./out/_TEST_AVG.png")
+	# write_image_to_file(eigen_means, "./out/_TEST_AVG.png")
 
 	# Get the difference from the mean (Φ) = Φ=Γ−Ψ
 	for i in xrange(image_count):
@@ -216,38 +216,134 @@ def write_eigenimages_one(imagespace, klimit, filename_postfix='0'):
 
 
 def test_one(means, imagespace, klimit, eigen_values):
-	test_img_name = "./img/train-png/0_n-93.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "0-93")
-
-	test_img_name = "./img/train-png/0_n-102.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "0-102")
-
-	test_img_name = "./img/train-png/3_n-121.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "3-121")
-
-	test_img_name = "./img/train-png/A_u-122.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "A-122")
-
-	test_img_name = "./img/train-png/C_u-58.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "C-58")
-
-	test_img_name = "./img/train-png/D_u-103.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "D-103")
-
-	test_img_name = "./img/train-png/E_u-28.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "E-28")
-
-	test_img_name = "./img/train-png/m_l-77.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "m-77")
-
-	test_img_name = "./img/train-png/O_u-9.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "O-9")
-
-	test_img_name = "./img/train-png/Q_u-6.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "q-6")
-
-	test_img_name = "./img/train-png/s_l-9.png"
-	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "s-9")
+	test_img_name = "./img/means/0_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "0_n")
+	test_img_name = "./img/means/1_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "1_n")
+	test_img_name = "./img/means/2_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "2_n")
+	test_img_name = "./img/means/3_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "3_n")
+	test_img_name = "./img/means/4_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "4_n")
+	test_img_name = "./img/means/5_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "5_n")
+	test_img_name = "./img/means/6_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "6_n")
+	test_img_name = "./img/means/7_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "7_n")
+	test_img_name = "./img/means/8_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "8_n")
+	test_img_name = "./img/means/9_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "9_n")
+	test_img_name = "./img/means/A_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "A_u")
+	test_img_name = "./img/means/B_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "B_u")
+	test_img_name = "./img/means/C_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "C_u")
+	test_img_name = "./img/means/D_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "D_u")
+	test_img_name = "./img/means/E_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "E_u")
+	test_img_name = "./img/means/F_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "F_u")
+	test_img_name = "./img/means/G_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "G_u")
+	test_img_name = "./img/means/H_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "H_u")
+	test_img_name = "./img/means/I_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "I_u")
+	test_img_name = "./img/means/J_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "J_u")
+	test_img_name = "./img/means/K_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "K_u")
+	test_img_name = "./img/means/L_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "L_u")
+	test_img_name = "./img/means/M_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "M_u")
+	test_img_name = "./img/means/N_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "N_u")
+	test_img_name = "./img/means/O_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "O_u")
+	test_img_name = "./img/means/P_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "P_u")
+	test_img_name = "./img/means/Q_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "Q_u")
+	test_img_name = "./img/means/R_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "R_u")
+	test_img_name = "./img/means/S_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "S_u")
+	test_img_name = "./img/means/T_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "T_u")
+	test_img_name = "./img/means/U_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "U_u")
+	test_img_name = "./img/means/V_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "V_u")
+	test_img_name = "./img/means/W_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "W_u")
+	test_img_name = "./img/means/X_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "X_u")
+	test_img_name = "./img/means/Y_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "Y_u")
+	test_img_name = "./img/means/Z_u.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "Z_u")
+	test_img_name = "./img/means/a_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "a_l")
+	test_img_name = "./img/means/b_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "b_l")
+	test_img_name = "./img/means/c_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "c_l")
+	test_img_name = "./img/means/d_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "d_l")
+	test_img_name = "./img/means/e_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "e_l")
+	test_img_name = "./img/means/f_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "f_l")
+	test_img_name = "./img/means/g_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "g_l")
+	test_img_name = "./img/means/h_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "h_l")
+	test_img_name = "./img/means/i_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "i_l")
+	test_img_name = "./img/means/j_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "j_l")
+	test_img_name = "./img/means/k_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "k_l")
+	test_img_name = "./img/means/l_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "l_l")
+	test_img_name = "./img/means/m_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "m_l")
+	test_img_name = "./img/means/n_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "n_l")
+	test_img_name = "./img/means/o_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "o_l")
+	test_img_name = "./img/means/p_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "p_l")
+	test_img_name = "./img/means/q_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "q_l")
+	test_img_name = "./img/means/r_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "r_l")
+	test_img_name = "./img/means/s_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "s_l")
+	test_img_name = "./img/means/t_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "t_l")
+	test_img_name = "./img/means/u_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "u_l")
+	test_img_name = "./img/means/v_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "v_l")
+	test_img_name = "./img/means/w_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "w_l")
+	test_img_name = "./img/means/x1_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "x1_n")
+	test_img_name = "./img/means/x2_n.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "x2_n")
+	test_img_name = "./img/means/x_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "x_l")
+	test_img_name = "./img/means/y_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "y_l")
+	test_img_name = "./img/means/z_l.png"
+	test_one_go(means, imagespace, klimit, test_img_name, eigen_values, "z_l")
 
 
 def test_one_go(means, imagespace, klimit, test_img_name, eigen_values, filename_postfix='0'):
