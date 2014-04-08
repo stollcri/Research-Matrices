@@ -341,27 +341,75 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 
 		scores.append(total_score)
 
-	# # Euclidian distance
+	max_score = -999999
+	max_score_spot = -1
+	for index, score in enumerate(scores):
+		print characters[index], score, '\t', max_score
+		if score > max_score:
+			max_score = score
+			max_score_spot = index
+	print characters[max_score_spot], max_score
+
+	answer = characters[max_score_spot]
+	print show_time(), "< test_knowledge"
+	return answer, max_score
+
+
+	# # Euclidian distance 1
 	# scores = []
 	# pixel_count = len(weights[0])
 	# for weight_vector in weights:
 	# 	score = 0.0
 	# 	for index, feature in enumerate(weight_vector):
-	# 		score += (((question_weights[index] - weight_vector[index]) / pixel_count) * ((question_weights[index] - weight_vector[index]) / pixel_count))
-	# 		total_score = (math.sqrt(score) / klimit)
+	# 		#print weight_vector[index], question_weights[index], pixel_count
+	# 		# score +=  math.sqrt((weight_vector[index] - question_weights[index]) * (weight_vector[index] - question_weights[index]))
+	# 		score +=  (weight_vector[index] - question_weights[index]) * (weight_vector[index] - question_weights[index])
+	# 	# total_score = score / klimit
+	# 	total_score = math.sqrt(score)
 	# 	scores.append(total_score)
-	# 	print total_score
+	# 	#print total_score
 
-	max_score = 0
-	max_score_spot = -1
-	for index, score in enumerate(scores):
-		if score > max_score:
-			max_score = score
-			max_score_spot = index
+	# min_score = 999999
+	# mix_score_spot = -1
+	# for index, score in enumerate(scores):
+	# 	print characters[index], score, '\t', min_score
+	# 	if score < min_score:
+	# 		min_score = score
+	# 		mix_score_spot = index
 	
-	answer = characters[max_score_spot]
-	print show_time(), "< test_knowledge"
-	return answer, max_score
+	# print characters[mix_score_spot], min_score
+
+	# answer = characters[mix_score_spot]
+	# print show_time(), "< test_knowledge"
+	# return answer, min_score
+
+
+	
+	# # Euclidian distance 2
+	# scores = []
+	# pixel_count = len(weights[0])
+	# for weight_vector in weights:
+	# 	score = 0.0
+	# 	for index, feature in enumerate(weight_vector):
+	# 		#print weight_vector[index], question_weights[index], pixel_count
+	# 		score += (((weight_vector[index] - question_weights[index]) / pixel_count) * ((weight_vector[index] - question_weights[index]) / pixel_count)) / eigen_values[index]
+	# 	total_score = math.sqrt(score) / math.sqrt(klimit)
+	# 	scores.append(total_score)
+	# 	#print total_score
+
+	# min_score = 999999
+	# mix_score_spot = -1
+	# for index, score in enumerate(scores):
+	# 	print characters[index], score, '\t', min_score
+	# 	if score < min_score:
+	# 		min_score = score
+	# 		mix_score_spot = index
+	
+	# print min_score, characters[mix_score_spot]
+
+	# answer = characters[mix_score_spot]
+	# print show_time(), "< test_knowledge"
+	# return answer, min_score
 
 
 def start_ocr(text_image, k_limit, image_space, eigen_means, eigen_values, characters, weights):
