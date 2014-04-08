@@ -6,6 +6,7 @@ import os
 import math
 import pickle
 import numpy
+import datetime
 from PIL import Image
 
 """
@@ -15,7 +16,12 @@ To run:
 	rm ./out/img* && ./ocr-eig.py ./img/RightsOfManB.png
 """
 
+def show_time():
+	return str(datetime.datetime.now())
+
+
 def load_knowledge(eigenspace_pickle, charweight_pickle):
+	print show_time(), "> load_knowledge"
 	if os.path.exists(eigenspace_pickle):
 		eigenspace = pickle.load(open(eigenspace_pickle, "rb"))
 		k_limit = eigenspace["k_limit"]
@@ -33,10 +39,12 @@ def load_knowledge(eigenspace_pickle, charweight_pickle):
 		print "Character weights file", charweight_pickle, "not found."
 		exit
 
+	print show_time(), "< load_knowledge"
 	return k_limit, image_space, eigen_values, characters, weights
 
 
 def read_and_split(filename):
+	print show_time(), "> read_and_split"
 	if not os.path.exists(filename):
 		return []
 
@@ -63,11 +71,12 @@ def read_and_split(filename):
 
 		png_array[row][col] = int(png_pixel)
 		col += 1
-
+	print show_time(), "< read_and_split"
 	return find_characters(png_array, png_depth)
 
 
 def find_characters(image_matrix, depth):
+	print show_time(), "> find_characters"
 	threshhold = 128
 	characters = []
 
@@ -91,6 +100,7 @@ def find_characters(image_matrix, depth):
 				for result in results:
 					characters.append(result)
 				text_rows = []
+	print show_time(), "< find_characters"
 	return characters
 
 
@@ -360,6 +370,7 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 	write_eigenimage(new_imagespace, klimit, curchar)
 
 def test_knowledge(question, klimit, imagespace, eigen_values, characters, weights, curchar):
+	print show_time(), "> test_knowledge"
 	test_array = numpy.array(question)
 	question_weights = []
 	# get the weights for the unseeen image by projecting it down to eigenimagespace
@@ -400,6 +411,7 @@ def test_knowledge(question, klimit, imagespace, eigen_values, characters, weigh
 			max_score_spot = index
 	
 	answer = characters[max_score_spot]
+	print show_time(), "< test_knowledge"
 	return answer, max_score
 
 
