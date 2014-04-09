@@ -9,6 +9,11 @@ import numpy
 import datetime
 from PIL import Image
 
+DEBUG_LOCATIONS = False
+DEBUG_VALUES = True
+DEBUG_PRINT_CHARS = False
+DEBUG_PRINT_EIGS = True
+
 """
 To run:
 	./ocr-eig.py ./img/RightsOfManB.png
@@ -21,7 +26,7 @@ def show_time():
 
 
 def load_knowledge(eigenspace_pickle, charweight_pickle):
-	print show_time(), "> load_knowledge"
+	if DEBUG_LOCATIONS: print show_time(), "> load_knowledge"
 	if os.path.exists(eigenspace_pickle):
 		eigenspace = pickle.load(open(eigenspace_pickle, "rb"))
 		k_limit = eigenspace["k_limit"]
@@ -40,12 +45,12 @@ def load_knowledge(eigenspace_pickle, charweight_pickle):
 		print "Character weights file", charweight_pickle, "not found."
 		exit
 
-	print show_time(), "< load_knowledge"
+	if DEBUG_LOCATIONS: print show_time(), "< load_knowledge"
 	return k_limit, image_space, eigen_means, eigen_values, characters, weights
 
 
 def read_and_split(filename):
-	print show_time(), "> read_and_split"
+	if DEBUG_LOCATIONS: print show_time(), "> read_and_split"
 	if not os.path.exists(filename):
 		return []
 
@@ -72,12 +77,12 @@ def read_and_split(filename):
 
 		png_array[row][col] = int(png_pixel)
 		col += 1
-	print show_time(), "< read_and_split"
+	if DEBUG_LOCATIONS: print show_time(), "< read_and_split"
 	return find_characters(png_array, png_depth)
 
 
 def find_characters(image_matrix, depth):
-	print show_time(), "> find_characters"
+	if DEBUG_LOCATIONS: print show_time(), "> find_characters"
 	threshhold = 128
 	characters = []
 
@@ -101,7 +106,7 @@ def find_characters(image_matrix, depth):
 				for result in results:
 					characters.append(result)
 				text_rows = []
-	print show_time(), "< find_characters"
+	if DEBUG_LOCATIONS: print show_time(), "< find_characters"
 	return characters
 
 
@@ -189,7 +194,7 @@ def size_character(eigen_image, target_file):
 	#
 	# Uncomment to save out the captured characters
 	#
-	png_image.save(target_file)
+	if DEBUG_PRINT_CHARS: png_image.save(target_file)
 	for index, pixel in enumerate(png_image.getdata()):
 		png_array[index] = int(pixel)
 
@@ -256,8 +261,8 @@ def write_image_to_file(eigen_image, target_file):
 			col = 0
 		if row >= width:
 			break
-		# pixelval = int(eigen_image[row][col])
-		png_image.putpixel((row, col), pixelval)
+		#pixelval = int(eigen_image[row][col])
+		#png_image.putpixel((row, col), pixelval)
 		png_image.putpixel((col, row), int(pixel))
 		col += 1
 
@@ -290,11 +295,11 @@ def write_eigenimage(imagespace, klimit, filename_postfix='0'):
 	for i in xrange(0, width):
 		eigenimage[i] += col_shift
 		eigenimage[i] = int(round(eigenimage[i] * col_scale))
-
+	
 	write_image_to_file(eigenimage, "./out/_TEST_"+str(filename_postfix)+".png")
 
 def write_question_image_projected(weights, imagespace, eigen_values, klimit, curchar):
-	print show_time(), "> write_question_image_projected"
+	if DEBUG_LOCATIONS: print show_time(), "> write_question_image_projected"
 	row = 0
 	col = 0
 	height, width = imagespace.shape
@@ -307,10 +312,10 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 			row += 1
 			col = 0
 	write_eigenimage(new_imagespace, klimit, curchar)
-	print show_time(), "< write_question_image_projected"
+	if DEBUG_LOCATIONS: print show_time(), "< write_question_image_projected"
 
 def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, characters, weights, curchar):
-	print show_time(), "> test_knowledge"
+	if DEBUG_LOCATIONS: print show_time(), "> test_knowledge"
 
 	# subtract the imagespace mean
 	for index, value in enumerate(question):
@@ -329,7 +334,7 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	#
 	# DEBUG
 	#
-	#write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
+	if DEBUG_PRINT_EIGS: write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
 
 	# Cosine similarity
 	scores = []
@@ -352,14 +357,14 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	max_score = -999999
 	max_score_spot = -1
 	for index, score in enumerate(scores):
-		print characters[index], score, '\t', max_score
+		if DEBUG_VALUES: print characters[index], score, '\t', max_score
 		if score > max_score:
 			max_score = score
 			max_score_spot = index
-	print characters[max_score_spot], max_score
+	if DEBUG_VALUES: print characters[max_score_spot], max_score
 
 	answer = characters[max_score_spot]
-	print show_time(), "< test_knowledge"
+	if DEBUG_LOCATIONS: print show_time(), "< test_knowledge"
 	return answer, max_score
 
 
