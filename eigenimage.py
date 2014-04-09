@@ -13,7 +13,7 @@ from PIL import Image
 """
 
 def get_k_limit(sigma):
-	klimit = 0
+	klimit = 1
 	last_eigenvalue = 0
 	eigenvalues = numpy.nditer(sigma, flags=['f_index'])
 	while not eigenvalues.finished:
