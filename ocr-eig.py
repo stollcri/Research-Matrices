@@ -7,7 +7,7 @@ import math
 import pickle
 import numpy
 import datetime
-from PIL import Image
+from PIL import Image, ImageDraw
 
 DEBUG_LOCATIONS = False
 DEBUG_VALUES = True
@@ -186,7 +186,18 @@ def size_character(eigen_image, target_file):
 	new_image = tmp_image.crop((x_left, y_top, x_right, y_bottom))
 	#png_image = new_image.resize((32, 32))
 	#png_image = new_image.resize((16, 16))
-	png_image = new_image.resize((12, 12))
+	#png_image = new_image.resize((12, 12))
+
+	fill_color = "#000000"
+	image_size_final = 12
+	new_image.thumbnail((image_size_final-2, image_size_final-2), Image.ANTIALIAS)
+	png_image = Image.new('L', (image_size_final, image_size_final))
+	new_draw = ImageDraw.Draw(png_image)
+	new_draw.rectangle(((0, 0), (image_size_final, image_size_final)), fill_color)
+	width, height = new_image.size
+	originx = int((image_size_final - width) / 2)
+	originy = int((image_size_final - height) / 2)
+	png_image.paste(new_image, (originx, originy, originx+width, originy+height))
 
 	#png_array = [0 for i in xrange(32 * 32)]
 	#png_array = [0 for i in xrange(16 * 16)]
@@ -243,7 +254,7 @@ def find_crop_bottom(image, width, height, depth):
 		for i in range(width):
 			if image.getpixel((i,j)) >= depth:
 				found_fg_start = True
-				return j+2
+				return j+1
 	return height
 
 

@@ -116,7 +116,7 @@ def gen_images(character, outputdirectory):
 		tmp_image = new_image.crop((x_left-1, y_top-1, x_right+2, y_bottom+2))
 
 		# fit character to final image size
-		png_image = tmp_image.resize((image_size_final, image_size_final))
+		#png_image = tmp_image.resize((image_size_final, image_size_final))
 		#
 		# USING THE LINE ABOVE (TESTING AGAINST TRAINING SET)
 		#  (upper case only)
@@ -132,14 +132,14 @@ def gen_images(character, outputdirectory):
 		#
 		# TODO: Check if certain letters perform better using one technique
 		#
-		# tmp_image.thumbnail((image_size_final-2, image_size_final-2), Image.ANTIALIAS)
-		# png_image = Image.new('L', (image_size_final, image_size_final))
-		# new_draw = ImageDraw.Draw(png_image)
-		# new_draw.rectangle(((0, 0), (image_size_final, image_size_final)), fill_color)
-		# width, height = tmp_image.size
-		# originx = int((image_size_final - width) / 2)
-		# originy = int((image_size_final - height) / 2)
-		# png_image.paste(tmp_image, (originx, originy, originx+width, originy+height))
+		tmp_image.thumbnail((image_size_final-2, image_size_final-2), Image.ANTIALIAS)
+		png_image = Image.new('L', (image_size_final, image_size_final))
+		new_draw = ImageDraw.Draw(png_image)
+		new_draw.rectangle(((0, 0), (image_size_final, image_size_final)), fill_color)
+		width, height = tmp_image.size
+		originx = int((image_size_final - width) / 2)
+		originy = int((image_size_final - height) / 2)
+		png_image.paste(tmp_image, (originx, originy, originx+width, originy+height))
 
 		# save the image
 		filename = gen_filename(outputdirectory, character, str(index))
