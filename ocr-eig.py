@@ -178,7 +178,7 @@ def size_character(eigen_image, target_file):
 	x_right = find_crop_right(tmp_image, width, height, image_depth)
 	y_top = find_crop_top(tmp_image, width, height, image_depth)
 	y_bottom = find_crop_bottom(tmp_image, width, height, image_depth)
-	new_image = tmp_image.crop((x_left, y_top, x_right+1, y_bottom+1))
+	new_image = tmp_image.crop((x_left, y_top, x_right, y_bottom))
 	#png_image = new_image.resize((32, 32))
 	#png_image = new_image.resize((16, 16))
 	png_image = new_image.resize((12, 12))
@@ -202,7 +202,10 @@ def find_crop_left(image, width, height, depth):
 		for j in range(height):
 			if image.getpixel((i,j)) >= depth:
 				found_fg_start = True
-				return i
+				if i:
+					return i-1
+				else:
+					return i
 	return 0
 
 
@@ -212,7 +215,7 @@ def find_crop_right(image, width, height, depth):
 		for j in range(height):
 			if image.getpixel((i,j)) >= depth:
 				found_fg_start = True
-				return i
+				return i+1
 	return width
 
 
@@ -222,7 +225,10 @@ def find_crop_top(image, width, height, depth):
 		for i in range(width):
 			if image.getpixel((i,j)) >= depth:
 				found_fg_start = True
-				return j
+				if j:
+					return j
+				else:
+					return j
 	return 0
 
 
@@ -232,7 +238,7 @@ def find_crop_bottom(image, width, height, depth):
 		for i in range(width):
 			if image.getpixel((i,j)) >= depth:
 				found_fg_start = True
-				return j
+				return j+2
 	return height
 
 
@@ -251,7 +257,7 @@ def write_image_to_file(eigen_image, target_file):
 		if row >= width:
 			break
 		# pixelval = int(eigen_image[row][col])
-		# png_image.putpixel((row, col), pixelval)
+		png_image.putpixel((row, col), pixelval)
 		png_image.putpixel((col, row), int(pixel))
 		col += 1
 
