@@ -26,8 +26,8 @@ def get_k_limit(sigma):
 		last_eigenvalue = eigenvalues[0]
 		eigenvalues.iternext()
 	# desired k value per character * number of characters (k8 * 64 characters = 512)
-	if klimit > 512:
-		return 512
+	if klimit > 1024:
+		return 1024
 	else:
 		return klimit
 
@@ -43,7 +43,8 @@ def add_to_matrix_from_file(filename):
 	#
 	# EXPERIMENTS: how does changing the thumbnail size impact OCR
 	#png_image.thumbnail((32, 32), Image.ANTIALIAS)
-	png_image.thumbnail((16, 16), Image.ANTIALIAS)
+	#png_image.thumbnail((16, 16), Image.ANTIALIAS)
+	png_image.thumbnail((12, 12), Image.ANTIALIAS)
 
 	col = 0
 	image = []

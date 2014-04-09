@@ -1,0 +1,31 @@
+images	dimensions		k		real time	user time	sys time	Men are born and remain free and equal in rights. Social	image filter
+
+3650	64 (8x8)		63		0m2.303s	0m2.215s	0m0.057s	VGn are bnrn and remain free and equaI in ri;htsL SnciaI	*-[1-5][0-9].png
+3650	144 (12x12)		141		0m6.964s	0m6.869s	0m0.078s	VD2 ALD LOL2 A2Z LDmAi2 YLDD A2Z DQDAt i2 LiQL11Q ZOniAt	*-[1-5][0-9].png
+3650	256 (16x16)		254		0m17.877s	0m17.798s	0m0.067s	YKK are eOrK aKf remaBK free aKf eQHa. BK rB9Kt3r ZOCBa.	*-[1-5][0-9].png
+3650	1024 (32x32)	256*	1m6.923s	1m6.466s	0m0.201s	Men are b.rn and remain tree and equa. in rightsL s.cia.	*-[1-5][0-9].png
+
+4161	64 (8x8)		63		0m2.093s	0m2.019s	0m0.058s	VGn are bnrn and remain free and equaI in ri;htsL SnciaI	*-1*.png
+4161	144 (12x12)		139		0m6.799s	0m6.712s	0m0.071s	fGq 8LG WCLq 8qM LGf8Eq tLGG 8qM GqW8I Eq LEqKtZK ZCCE8I	*-1*.png
+4161	169 (13x13)		167		0m9.385s	0m9.264s	0m0.064s	dqq qr9 bqrq qqd r9mq_q Tr99 qqd 9quqN _q r_qht9v 6qc_qN	*-1*.png
+4161	256 (16x16)		254		0m18.144s	0m18.044s	0m0.078s	Mee 1rO UOre 1ed rOm1Re frOO 1ed OOH1. Re rRehTHL mOOR1.	*-1*.png
+4161	289 (17x17)		288		0m23.685s	0m23.470s	0m0.120s	Hcn a!a La!n an1 !amaEn !!aa an1 aqaa1 En !E;Lt1; Sa1Ea1	*-1*.png
+4161	324 (18x18)		323		0m27.897s	0m27.775s	0m0.099s	V9n jr9 hOrn jnd r9mjin jr99 jnd 99UjI in riqh?sr SOCijI	*-1*.png
+4161	1024 (32x32)	256*	1m4.080s	1m3.859s	0m0.163s	Men are b.rn and remain tree and equa. in rightsL s.cia.	*-1*.png
+
+6570	64 (8x8)		63		0m2.149s	0m1.981s	0m0.116s	VGn are bnrn and remain free and equaI in ri;htsL SnciaI	*-[1234]*.png
+6570	121 (11x11)		120		0m5.308s	0m5.178s	0m0.082s	Men are hJrn and remain free and equaI in rightsL SJciaI	*-[1234]*.png
+6570	225 (15x15)		224		0m14.976s	0m14.741s	0m0.129s	Men are bUrn and remain tree and equa. in rightsL sUcia.	*-[1234]*.png
+6570	324 (18x18)		323		0m28.188s	0m27.972s	0m0.150s	Men are b.rn and remain Tree and equa. in righTsL s.cia.	*-[1234]*.png
+
+9417	144 (12x12)		143		0m6.951s	0m6.692s	0m0.159s	Men are horn and remain tree and equaI in rightGL SociaI	*.png
+9417	196 (14x14)		193		0m12.255s	0m11.834s	0m0.139s	VeG arC bOrG aGd rCmaiG TrCC aGd CqGaI iG riGhtKT SOciaI	*.png
+
+10658	64 (8x8)		63											VGn are bnrn and remain free and equaI in ri;htsL SnciaI	*.png
+10658	121 (11x11)		119		0m5.357s	0m5.074s	0m0.172s	#OH OXO _OXH OH_ XOOOjH XXOO OH_ O0OOj jH Xj0_Tcz OOOjOj	*.png
+10658	144 (12x12)		143		0m7.035s	0m6.799s	0m0.139s	Men are horn and remain tree and equaI in righ1GL SociaI	*.png
+10658	169 (13x13)		168		0m9.926s	0m9.510s	0m0.173s	Men are Lorn anJ remain tree anJ eQuaI in riqht9L SoCiaI	*.png
+10658	256 (16x16)		255											Men are b!rn and remain Tree and e;ua. in rightGL S!Cia.	*.png
+10658	1024 (32x32)	256*										@.n 'r. 1frn 'n1 r.T'tn fr.. 'n1 .mA'A tn rt,1A.' .fAt'A	*.png
+
+

@@ -180,14 +180,16 @@ def size_character(eigen_image, target_file):
 	y_bottom = find_crop_bottom(tmp_image, width, height, image_depth)
 	new_image = tmp_image.crop((x_left, y_top, x_right+1, y_bottom+1))
 	#png_image = new_image.resize((32, 32))
-	png_image = new_image.resize((16, 16))
+	#png_image = new_image.resize((16, 16))
+	png_image = new_image.resize((12, 12))
 
 	#png_array = [0 for i in xrange(32 * 32)]
-	png_array = [0 for i in xrange(16 * 16)]
+	#png_array = [0 for i in xrange(16 * 16)]
+	png_array = [0 for i in xrange(12 * 12)]
 	#
 	# Uncomment to save out the captured characters
 	#
-	# png_image.save(target_file)
+	png_image.save(target_file)
 	for index, pixel in enumerate(png_image.getdata()):
 		png_array[index] = int(pixel)
 
@@ -321,7 +323,7 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	#
 	# DEBUG
 	#
-	#write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
+	write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
 
 	# Cosine similarity
 	scores = []
