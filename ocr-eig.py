@@ -329,7 +329,7 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	#
 	# DEBUG
 	#
-	write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
+	#write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
 
 	# Cosine similarity
 	scores = []
