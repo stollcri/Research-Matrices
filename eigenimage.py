@@ -27,7 +27,6 @@ def get_k_limit(sigma):
 					break
 		last_eigenvalue = eigenvalues[0]
 		eigenvalues.iternext()
-	# desired k value per character * number of characters (k8 * 64 characters = 512)
 	if klimit > 1024:
 		return 1024
 	else:
@@ -44,9 +43,9 @@ def add_to_matrix_from_file(filename):
 	png_image = Image.open(filename)
 	#
 	# EXPERIMENTS: how does changing the thumbnail size impact OCR
-	#png_image.thumbnail((32, 32), Image.ANTIALIAS)
+	# ~~~~~ MUST BE HARMONIZED WITH ocr-eig.py ~~~~~
+	#
 	png_image.thumbnail((16, 16), Image.ANTIALIAS)
-	#png_image.thumbnail((12, 12), Image.ANTIALIAS)
 
 	col = 0
 	image = []
@@ -139,29 +138,28 @@ def create_eigenspace(eigen_images):
 	return imagespace, klimit, s
 
 
-def write_eigenimages_individual(imagespace, klimit, filename):
-	for z in xrange(0, klimit):
-		row = imagespace[z]
-		height, width = row.shape
-		eigenimage = [0 for i in xrange(width)]
-		col_max = -999999
-		col_min = 999999
-		for i in range(width):
-			col = row[0, i]
-			eigenimage[i] = col
-			if col < col_min:
-				col_min = col
-			if col > col_max:
-				col_max = col
+# def write_eigenimages_individual(imagespace, klimit, filename):
+# 	for z in xrange(0, klimit):
+# 		row = imagespace[z]
+# 		height, width = row.shape
+# 		eigenimage = [0 for i in xrange(width)]
+# 		col_max = -999999
+# 		col_min = 999999
+# 		for i in range(width):
+# 			col = row[0, i]
+# 			eigenimage[i] = col
+# 			if col < col_min:
+# 				col_min = col
+# 			if col > col_max:
+# 				col_max = col
 
-		col_shift = col_min * -1
-		col_range = col_max - col_min
-		col_scale = 255 / col_range
-		for i in xrange(0, width):
-			eigenimage[i] += col_shift
-			eigenimage[i] = int(round(eigenimage[i] * col_scale))
-		write_image_to_file(eigenimage, filename+"_k-"+str(z)+".png")
-	#return numpy.asarray(imagespace).reshape(-1)
+# 		col_shift = col_min * -1
+# 		col_range = col_max - col_min
+# 		col_scale = 255 / col_range
+# 		for i in xrange(0, width):
+# 			eigenimage[i] += col_shift
+# 			eigenimage[i] = int(round(eigenimage[i] * col_scale))
+# 		write_image_to_file(eigenimage, filename+"_k-"+str(z)+".png")
 
 
 def write_eigenimage(imagespace, klimit, filename_postfix='0'):
@@ -195,7 +193,7 @@ def write_eigenimage(imagespace, klimit, filename_postfix='0'):
 	write_image_to_file(eigenimage, "./out/_TEST_"+filename_postfix+".png")
 
 
-def generate_weights(imagespace, klimit, eigen_means):
+def generate_weights(imagespace, klimit):
 	character_list = [ "./img/means/001_n.png", "./img/means/002_n.png", "./img/means/003_n.png", "./img/means/004_n.png", "./img/means/005_n.png", "./img/means/006_n.png", "./img/means/007_n.png", "./img/means/008_n.png", "./img/means/009_n.png", "./img/means/010_n.png", "./img/means/011_n.png", "./img/means/0_n.png", "./img/means/1_n.png", "./img/means/2_n.png", "./img/means/3_n.png", "./img/means/4_n.png", "./img/means/5_n.png", "./img/means/6_n.png", "./img/means/7_n.png", "./img/means/8_n.png", "./img/means/9_n.png", "./img/means/A_u.png", "./img/means/B_u.png", "./img/means/C_u.png", "./img/means/D_u.png", "./img/means/E_u.png", "./img/means/F_u.png", "./img/means/G_u.png", "./img/means/H_u.png", "./img/means/I_u.png", "./img/means/J_u.png", "./img/means/K_u.png", "./img/means/L_u.png", "./img/means/M_u.png", "./img/means/N_u.png", "./img/means/O_u.png", "./img/means/P_u.png", "./img/means/Q_u.png", "./img/means/R_u.png", "./img/means/S_u.png", "./img/means/T_u.png", "./img/means/U_u.png", "./img/means/V_u.png", "./img/means/W_u.png", "./img/means/X_u.png", "./img/means/Y_u.png", "./img/means/Z_u.png", "./img/means/a_l.png", "./img/means/b_l.png", "./img/means/c_l.png", "./img/means/d_l.png", "./img/means/e_l.png", "./img/means/f_l.png", "./img/means/g_l.png", "./img/means/h_l.png", "./img/means/i_l.png", "./img/means/j_l.png", "./img/means/k_l.png", "./img/means/l_l.png", "./img/means/m_l.png", "./img/means/n_l.png", "./img/means/o_l.png", "./img/means/p_l.png", "./img/means/q_l.png", "./img/means/r_l.png", "./img/means/s_l.png", "./img/means/t_l.png", "./img/means/u_l.png", "./img/means/v_l.png", "./img/means/w_l.png", "./img/means/x_l.png", "./img/means/y_l.png", "./img/means/z_l.png"]
 	characters = []
 	weights = []
@@ -226,25 +224,17 @@ def generate_weights(imagespace, klimit, eigen_means):
 			letter = '"'
 		characters.append(letter)
 
-		new_weight = generate_weight(imagespace, klimit, eigen_means, character)
+		new_weight = generate_weight(imagespace, klimit, character)
 		weights.append(new_weight)
 	return characters, weights
 
 
-def generate_weight(imagespace, klimit, eigen_means, test_img_name):
+def generate_weight(imagespace, klimit, test_img_name):
 	test_img = add_to_matrix_from_file(test_img_name)
-	
-	# subtract the imagespace mean
-	# for index, value in enumerate(test_img):
-	# 	test_img[index] = test_img[index] - eigen_means[index]
-
 	test_array = numpy.array(test_img)
 	weights = []
 	for x in xrange(0, klimit):
 		eigen_vector = imagespace[x].transpose()
-		# print "test_array", test_array.shape, test_array
-		# print "eigen_vector", eigen_vector.shape, eigen_vector
-		# print "dot", numpy.dot(test_array, eigen_vector)[0,0]
 		weights.append(numpy.dot(test_array, eigen_vector)[0,0])
 	return weights
 
@@ -256,9 +246,6 @@ def test_one_go(imagespace, klimit, test_img_name, eigen_values, filename_postfi
 	# get the weights for the unseeen image by projecting it down to eigenimagespace
 	for x in xrange(0, klimit):
 		eigen_vector = imagespace[x].transpose()
-		# print "test_array", test_array.shape, test_array
-		# print "eigen_vector", eigen_vector.shape, eigen_vector
-		# print "dot", numpy.dot(test_array, eigen_vector)[0,0]
 		weights.append(numpy.dot(test_array, eigen_vector)[0,0])
 
 	# regenerate the unseen from weights, eigen values and imagespace
@@ -267,16 +254,11 @@ def test_one_go(imagespace, klimit, test_img_name, eigen_values, filename_postfi
 	height, width = imagespace.shape
 	new_imagespace = imagespace.copy()
 	for x in numpy.nditer(new_imagespace, op_flags=['readwrite']):
-		# print row, "/", col, ":", x, weights[row], means[col], ((x * weights[row]) + means[col])
 		x[...] = ((x * weights[row]) * eigen_values[row]) #+ means[col]
 		col += 1
 		if col >= width:
 			row += 1
 			col = 0
-
-	# print new_imagespace
-	# print weights[0], weights[1]
-	# print new_imagespace
 	write_eigenimage(new_imagespace, klimit, filename_postfix)
 
 
@@ -292,8 +274,6 @@ def write_image_to_file(eigen_image, target_file):
 			col = 0
 		if row >= width:
 			break
-		# pixelval = int(eigen_image[row][col])
-		# png_image.putpixel((row, col), pixelval)
 		png_image.putpixel((col, row), int(pixel))
 		col += 1
 
@@ -317,7 +297,7 @@ def create_eigenimage(source_directory):
 		print " k_limit", k_limit
 		print " eigen_values", eigen_values.shape
 	else:
-		print "No chache, generating eigenimagespace"
+		print "No cache, generating eigenimagespace"
 		eigen_images = read_images(source_directory)
 		print " rows", len(eigen_images), "cols", len(eigen_images[0])
 
@@ -342,8 +322,8 @@ def create_eigenimage(source_directory):
 		characters = character_weights["characters"]
 		weights = character_weights["weights"]
 	else:
-		print "No chache, generating all character weights"
-		characters, weights = generate_weights(image_space, k_limit, eigen_means)
+		print "No cache, generating all character weights"
+		characters, weights = generate_weights(image_space, k_limit)
 		character_weights = {}
 		character_weights["characters"] = characters
 		character_weights["weights"] = weights
