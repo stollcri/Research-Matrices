@@ -372,17 +372,24 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 
 	# Cosine similarity
 	scores = []
-	for weight_vector in weights:
-		numerator = 0
-		denominatorA = 0
-		denominatorB = 0
-		for index, feature in enumerate(weight_vector):
-			numerator += question_weights[index] * weight_vector[index]
-			denominatorA += question_weights[index] * question_weights[index]
-			denominatorB += weight_vector[index] * weight_vector[index]
+	for idx, weight_vector in enumerate(weights):
+		doloop = True
+		if lastchar.islower():
+			if characters[idx].isupper():
+				doloop = False
 
-		if denominatorA and denominatorB:
-			total_score = numerator / (math.sqrt(denominatorA) * math.sqrt(denominatorB))
+		if doloop:
+			numerator = 0
+			denominatorA = 0
+			denominatorB = 0
+			for index, feature in enumerate(weight_vector):
+				numerator += question_weights[index] * weight_vector[index]
+				denominatorA += question_weights[index] * question_weights[index]
+				denominatorB += weight_vector[index] * weight_vector[index]
+			if denominatorA and denominatorB:
+				total_score = numerator / (math.sqrt(denominatorA) * math.sqrt(denominatorB))
+			else:
+				total_score = 0
 		else:
 			total_score = 0
 
