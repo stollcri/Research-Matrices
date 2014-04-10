@@ -7,7 +7,7 @@ import math
 import pickle
 import numpy
 import datetime
-from PIL import Image, ImageDraw, ImageOps
+from PIL import Image, ImageDraw, ImageOps, ImageEnhance
 
 DEBUG_LOCATIONS = False
 DEBUG_VALUES = False
@@ -54,7 +54,12 @@ def read_and_split(filename):
 	if not os.path.exists(filename):
 		return []
 
-	png_image = Image.open(filename)
+	raw_image = Image.open(filename)
+	png_image = raw_image.convert('L', dither=Image.FLOYDSTEINBERG)
+	contrasty = ImageEnhance.Contrast(png_image)
+	png_image = contrasty.enhance(1.3)
+	sharpness = ImageEnhance.Sharpness(png_image)
+	png_image = sharpness.enhance(1.2)
 	png_width, png_height = png_image.size
 	png_depth = 255
 	png_array = [[0 for j in xrange(png_width)] for i in xrange(png_height)]
@@ -65,20 +70,8 @@ def read_and_split(filename):
 		if col >= png_width:
 			row += 1
 			col = 0
-		if png_image.mode == 'L':
-			pixelr = pixel
-			png_pixel = pixelr
-		elif png_image.mode == '1':
-			pixelr = pixel
-			png_pixel = pixelr
-		elif png_image.mode == 'RGB':
-			pixelr, pixelg, pixelb = pixel
-			png_pixel = math.floor((pixelr + pixelg + pixelb) / 3)
-		elif png_image.mode == 'RGBA':
-			pixelr, pixelg, pixelb, pixela = pixel
-			png_pixel = math.floor((pixelr + pixelg + pixelb) / 3)
 		
-		png_array[row][col] = int(png_pixel)
+		png_array[row][col] = int(pixel)
 		col += 1
 	if DEBUG_LOCATIONS: print show_time(), "< read_and_split"
 	return find_characters(png_array, png_depth)
@@ -86,7 +79,7 @@ def read_and_split(filename):
 
 def find_characters(image_matrix, depth):
 	if DEBUG_LOCATIONS: print show_time(), "> find_characters"
-	threshhold = 128
+	threshhold = 192
 	characters = []
 
 	text_rows = []
@@ -118,7 +111,6 @@ def split_characters(text_row, threshhold, row_index):
 	row_count = len(text_row)
 	column_count = len(text_row[0])
 	space_width = 2 + int(round(column_count * .005))
-	#print column_count, space_width
 	characters = []
 
 	text_cols = []
@@ -183,17 +175,12 @@ def size_character(eigen_image, target_file):
 			tmp_image.putpixel((col, row), int(eigen_image[row][col]))
 			col += 1
 	
-	# png_image = tmp_image.resize((32, 32))
-	
 	image_depth = 128
 	x_left = find_crop_left(tmp_image, width, height, image_depth)
 	x_right = find_crop_right(tmp_image, width, height, image_depth)
 	y_top = find_crop_top(tmp_image, width, height, image_depth)
 	y_bottom = find_crop_bottom(tmp_image, width, height, image_depth)
 	one_image = tmp_image.crop((x_left, y_top, x_right, y_bottom))
-	#png_image = new_image.resize((32, 32))
-	#png_image = new_image.resize((16, 16))
-	#png_image = new_image.resize((12, 12))
 
 	fill_color = "#000000"
 	image_size_work = 14
@@ -217,8 +204,6 @@ def size_character(eigen_image, target_file):
 	new_height = int(math.ceil(height * scale_h))
 	new_image = one_image.resize((new_width, new_height), Image.ANTIALIAS)
 
-	# new_image = one_image
-
 	new_image.thumbnail((image_size_final, image_size_final), Image.ANTIALIAS)
 	png_image = Image.new('L', (image_size_final, image_size_final))
 	new_draw = ImageDraw.Draw(png_image)
@@ -228,8 +213,6 @@ def size_character(eigen_image, target_file):
 	originy = int(round((image_size_final - height) / 2))
 	png_image.paste(new_image, (originx, originy, originx+width, originy+height))
 
-	#png_array = [0 for i in xrange(32 * 32)]
-	#png_array = [0 for i in xrange(16 * 16)]
 	png_array = [0 for i in xrange(image_size_final * image_size_final)]
 	#
 	# Uncomment to save out the captured characters
@@ -295,8 +278,6 @@ def write_image_to_file(eigen_image, target_file):
 			col = 0
 		if row >= width:
 			break
-		#pixelval = int(eigen_image[row][col])
-		#png_image.putpixel((row, col), pixelval)
 		png_image.putpixel((col, row), int(pixel))
 		col += 1
 
