@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageOps
 
 DEBUG_LOCATIONS = False
 DEBUG_VALUES = False
-DEBUG_PRINT_CHARS = True
+DEBUG_PRINT_CHARS = False
 DEBUG_PRINT_EIGS = False
 
 """
@@ -77,7 +77,7 @@ def read_and_split(filename):
 		elif png_image.mode == 'RGBA':
 			pixelr, pixelg, pixelb, pixela = pixel
 			png_pixel = math.floor((pixelr + pixelg + pixelb) / 3)
-
+		
 		png_array[row][col] = int(png_pixel)
 		col += 1
 	if DEBUG_LOCATIONS: print show_time(), "< read_and_split"
@@ -348,7 +348,7 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 	write_eigenimage(new_imagespace, klimit, curchar)
 	if DEBUG_LOCATIONS: print show_time(), "< write_question_image_projected"
 
-def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, characters, weights, curchar):
+def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, characters, weights, lastchar, curchar):
 	if DEBUG_LOCATIONS: print show_time(), "> test_knowledge"
 
 	# subtract the imagespace mean
@@ -392,7 +392,7 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 				total_score = 0
 		else:
 			total_score = 0
-
+		
 		scores.append(total_score)
 
 	max_score = -999999
@@ -414,11 +414,12 @@ def start_ocr(text_image, k_limit, image_space, eigen_means, eigen_values, chara
 		return 0
 
 	letters = read_and_split(text_image)
+	answer = ""
 	result = ""
 	i = 0
 	for letter in letters:
 		if len(letter) > 2:
-			answer, max_score = test_knowledge(letter, k_limit, image_space, eigen_means, eigen_values, characters, weights, i)
+			answer, max_score = test_knowledge(letter, k_limit, image_space, eigen_means, eigen_values, characters, weights, answer, i)
 			result += answer
 		else:
 			result += letter[0]
