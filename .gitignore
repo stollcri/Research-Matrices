@@ -38,3 +38,5 @@ nosetests.xml
 #
 out/*
 img/*-png
+
+*.glue
