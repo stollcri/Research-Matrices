@@ -108,6 +108,7 @@ def find_characters(image_matrix, depth):
 				results = split_characters(text_rows, threshhold, row_index)
 				for result in results:
 					characters.append(result)
+				characters.append('\n')
 				text_rows = []
 	if DEBUG_LOCATIONS: print show_time(), "< find_characters"
 	return characters
