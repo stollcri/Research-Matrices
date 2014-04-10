@@ -68,6 +68,9 @@ def read_and_split(filename):
 		if png_image.mode == 'L':
 			pixelr = pixel
 			png_pixel = pixelr
+		elif png_image.mode == '1':
+			pixelr = pixel
+			png_pixel = pixelr
 		elif png_image.mode == 'RGB':
 			pixelr, pixelg, pixelb = pixel
 			png_pixel = math.floor((pixelr + pixelg + pixelb) / 3)
