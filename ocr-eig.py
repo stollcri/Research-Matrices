@@ -7,12 +7,12 @@ import math
 import pickle
 import numpy
 import datetime
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageOps
 
 DEBUG_LOCATIONS = False
-DEBUG_VALUES = True
-DEBUG_PRINT_CHARS = False
-DEBUG_PRINT_EIGS = True
+DEBUG_VALUES = False
+DEBUG_PRINT_CHARS = True
+DEBUG_PRINT_EIGS = False
 
 """
 To run:
@@ -178,30 +178,43 @@ def size_character(eigen_image, target_file):
 			col += 1
 	
 	# png_image = tmp_image.resize((32, 32))
+	
 	image_depth = 128
 	x_left = find_crop_left(tmp_image, width, height, image_depth)
 	x_right = find_crop_right(tmp_image, width, height, image_depth)
 	y_top = find_crop_top(tmp_image, width, height, image_depth)
 	y_bottom = find_crop_bottom(tmp_image, width, height, image_depth)
-	new_image = tmp_image.crop((x_left, y_top, x_right, y_bottom))
+	one_image = tmp_image.crop((x_left, y_top, x_right, y_bottom))
 	#png_image = new_image.resize((32, 32))
 	#png_image = new_image.resize((16, 16))
 	#png_image = new_image.resize((12, 12))
 
 	fill_color = "#000000"
-	image_size_final = 12
-	new_image.thumbnail((image_size_final-2, image_size_final-2), Image.ANTIALIAS)
+	image_size_work = 14
+	image_size_final = 16
+
+	width, height = one_image.size
+
+	scale_min = image_size_work / float(max(width, height))
+	new_width = int(math.ceil(width * scale_min))
+	new_height = int(math.ceil(height * scale_min))
+	print target_file, "\t", width, "\t", height, "\t", scale_min
+	new_image = one_image.resize((new_width, new_height), Image.ANTIALIAS)
+
+	# new_image = one_image
+
+	new_image.thumbnail((image_size_final, image_size_final), Image.ANTIALIAS)
 	png_image = Image.new('L', (image_size_final, image_size_final))
 	new_draw = ImageDraw.Draw(png_image)
 	new_draw.rectangle(((0, 0), (image_size_final, image_size_final)), fill_color)
 	width, height = new_image.size
-	originx = int((image_size_final - width) / 2)
-	originy = int((image_size_final - height) / 2)
+	originx = int(round((image_size_final - width) / 2))
+	originy = int(round((image_size_final - height) / 2))
 	png_image.paste(new_image, (originx, originy, originx+width, originy+height))
 
 	#png_array = [0 for i in xrange(32 * 32)]
 	#png_array = [0 for i in xrange(16 * 16)]
-	png_array = [0 for i in xrange(12 * 12)]
+	png_array = [0 for i in xrange(image_size_final * image_size_final)]
 	#
 	# Uncomment to save out the captured characters
 	#
@@ -218,10 +231,7 @@ def find_crop_left(image, width, height, depth):
 		for j in range(height):
 			if image.getpixel((i,j)) >= depth:
 				found_fg_start = True
-				if i:
-					return i-1
-				else:
-					return i
+				return i
 	return 0
 
 
@@ -241,10 +251,7 @@ def find_crop_top(image, width, height, depth):
 		for i in range(width):
 			if image.getpixel((i,j)) >= depth:
 				found_fg_start = True
-				if j:
-					return j
-				else:
-					return j
+				return j
 	return 0
 
 
@@ -329,8 +336,8 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	if DEBUG_LOCATIONS: print show_time(), "> test_knowledge"
 
 	# subtract the imagespace mean
-	for index, value in enumerate(question):
-		question[index] = question[index] - eigen_means[index]
+	# for index, value in enumerate(question):
+	# 	question[index] = question[index] - eigen_means[index]
 
 	test_array = numpy.array(question)
 	question_weights = []
