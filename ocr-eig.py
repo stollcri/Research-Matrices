@@ -117,6 +117,8 @@ def find_characters(image_matrix, depth):
 def split_characters(text_row, threshhold, row_index):
 	row_count = len(text_row)
 	column_count = len(text_row[0])
+	space_width = 2 + int(round(column_count * .005))
+	#print column_count, space_width
 	characters = []
 
 	text_cols = []
@@ -133,7 +135,7 @@ def split_characters(text_row, threshhold, row_index):
 		if not blank_col:
 			if space_cols > 8:
 				characters.append([''])
-			elif space_cols > 4:
+			elif space_cols > space_width:
 				characters.append([' '])
 
 			text_cols.append(pixel_col)
