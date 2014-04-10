@@ -7,7 +7,10 @@ SVDOPTS_AVG = -c
 default: all
 
 .PHONY: all
-all: clean train
+all: deep eispace
+
+.PHONY: shallow
+shallow: clean train
 
 .PHONY: deep
 deep: deepclean trainingset train
@@ -57,8 +60,8 @@ svd-avg:
 	./svd-avg.py ./out/avg26.png ./img/train-png/${LETTER_AVG}-27.png ./out/avg27.png ${SVDOPTS_AVG}
 
 
-.PHONY: trainingset trainingset-upper trainingset-lower trainingset-number trainingset-punctuation
-trainingset: trainingset-upper trainingset-lower trainingset-number trainingset-punctuation
+.PHONY: trainingset trainingset-upper trainingset-lower trainingset-number trainingset-punctuation ts-reduce
+trainingset: trainingset-upper trainingset-lower trainingset-number trainingset-punctuation ts-reduce
 
 trainingset-test:
 	@for word in the be to of and in that have it for not on with he as you do at; do \
@@ -94,6 +97,9 @@ trainingset-punctuation:
 		./gen-train.py $$letter ./img/train-png ; \
 	done
 	@echo $@ complete
+
+ts-reduce:
+	./clean.sh
 
 
 .PHONY: train train_u train_l train_n train_p
@@ -132,9 +138,14 @@ ${train_set_p}: tsp-%:
 	./mean.py ./out/$i_n.png ./img/train-png/$i_n-*.png
 
 
+.PHONY: eispace
+eispace:
+	./eigenimage.py ./img/train-png/
+
+
 .PHONY: test
 test:
-	./ml-ocr.py -b ./out/ ./img/train-png/
+	time ./ocr-eig.py ./img/RightsOfManB.png
 
 
 .PHONY: deepclean clean cleantrain
