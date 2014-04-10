@@ -195,10 +195,20 @@ def size_character(eigen_image, target_file):
 
 	width, height = one_image.size
 
-	scale_min = image_size_work / float(max(width, height))
-	new_width = int(math.ceil(width * scale_min))
-	new_height = int(math.ceil(height * scale_min))
-	print target_file, "\t", width, "\t", height, "\t", scale_min
+	if width < 5 and height < 5:
+		scale_w = image_size_work / float(max(width, height) * 1.4)
+		scale_h = image_size_work / float(max(width, height) * 2.8)
+	elif width < 4:
+		scale_w = image_size_work / float(max(width, height) * 1.6)
+		scale_h = image_size_work / float(max(width, height))
+	elif width < 6:
+		scale_w = image_size_work / float(max(width, height) * .8)
+		scale_h = image_size_work / float(max(width, height))
+	else:
+		scale_w = image_size_work / float(max(width, height))
+		scale_h = scale_w
+	new_width = int(math.ceil(width * scale_w))
+	new_height = int(math.ceil(height * scale_h))
 	new_image = one_image.resize((new_width, new_height), Image.ANTIALIAS)
 
 	# new_image = one_image
