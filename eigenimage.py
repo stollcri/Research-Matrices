@@ -8,6 +8,8 @@ import numpy
 import pickle
 from PIL import Image
 
+DEBUG_TEST_EIGENSPACE = False
+
 """
 	./eigenimage.py ./img/train-png/*-[123]*.png
 """
@@ -347,19 +349,14 @@ def create_eigenimage(source_directory):
 		character_weights["weights"] = weights
 		pickle.dump(character_weights, open(charweight_pickle, "wb"))
 
-	print "Generating check images"
-	# test the imagespace's ability to reproduce characters
-	# ?
-	test_one_go(image_space, k_limit, "./img/means/003_n.png", eigen_values, filename_postfix="01")
-	# @
-	test_one_go(image_space, k_limit, "./img/means/008_n.png", eigen_values, filename_postfix="02")
-	# g
-	test_one_go(image_space, k_limit, "./img/means/g_l.png", eigen_values, filename_postfix="03")
-	# H
-	test_one_go(image_space, k_limit, "./img/means/H_u.png", eigen_values, filename_postfix="04")
-	# Q
-	test_one_go(image_space, k_limit, "./img/means/Q_u.png", eigen_values, filename_postfix="05")
-
+	if DEBUG_TEST_EIGENSPACE:
+		print "Generating check images"
+		# test the imagespace's ability to reproduce characters
+		test_one_go(image_space, k_limit, "./img/means/003_n.png", eigen_values, filename_postfix="01")
+		test_one_go(image_space, k_limit, "./img/means/008_n.png", eigen_values, filename_postfix="02")
+		test_one_go(image_space, k_limit, "./img/means/g_l.png", eigen_values, filename_postfix="03")
+		test_one_go(image_space, k_limit, "./img/means/H_u.png", eigen_values, filename_postfix="04")
+		test_one_go(image_space, k_limit, "./img/means/Q_u.png", eigen_values, filename_postfix="05")
 
 
 if __name__ == "__main__":
