@@ -214,9 +214,7 @@ def size_character(eigen_image, target_file):
 	png_image.paste(new_image, (originx, originy, originx+width, originy+height))
 
 	png_array = [0 for i in xrange(image_size_final * image_size_final)]
-	#
-	# Uncomment to save out the captured characters
-	#
+	
 	if DEBUG_PRINT_CHARS: png_image.save(target_file)
 	for index, pixel in enumerate(png_image.getdata()):
 		png_array[index] = int(pixel)
@@ -320,7 +318,6 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 	height, width = imagespace.shape
 	new_imagespace = imagespace.copy()
 	for x in numpy.nditer(new_imagespace, op_flags=['readwrite']):
-		# print row, "/", col, ":", x, weights[row], means[col], ((x * weights[row]) + means[col])
 		x[...] = ((x * weights[row]) * eigen_values[row]) #+ means[col]
 		col += 1
 		if col >= width:
@@ -331,24 +328,13 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 
 def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, characters, weights, lastchar, curchar):
 	if DEBUG_LOCATIONS: print show_time(), "> test_knowledge"
-
-	# subtract the imagespace mean
-	# for index, value in enumerate(question):
-	# 	question[index] = question[index] - eigen_means[index]
-
 	test_array = numpy.array(question)
 	question_weights = []
 	# get the weights for the unseeen image by projecting it down to eigenimagespace
 	for x in xrange(0, klimit):
 		eigen_vector = imagespace[x].transpose()
-		# print "test_array", test_array.shape, test_array
-		# print "eigen_vector", eigen_vector.shape, eigen_vector
-		# print "dot", numpy.dot(test_array, eigen_vector)[0,0]
 		question_weights.append(numpy.dot(test_array, eigen_vector)[0,0])
 
-	#
-	# DEBUG
-	#
 	if DEBUG_PRINT_EIGS: write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
 
 	# Cosine similarity
