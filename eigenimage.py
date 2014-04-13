@@ -8,6 +8,7 @@ import numpy
 import pickle
 from PIL import Image
 
+DEBUG_PRINT_EIGENIMAGES = False
 DEBUG_TEST_EIGENSPACE = False
 
 """
@@ -138,28 +139,28 @@ def create_eigenspace(eigen_images):
 	return imagespace, klimit, s
 
 
-# def write_eigenimages_individual(imagespace, klimit, filename):
-# 	for z in xrange(0, klimit):
-# 		row = imagespace[z]
-# 		height, width = row.shape
-# 		eigenimage = [0 for i in xrange(width)]
-# 		col_max = -999999
-# 		col_min = 999999
-# 		for i in range(width):
-# 			col = row[0, i]
-# 			eigenimage[i] = col
-# 			if col < col_min:
-# 				col_min = col
-# 			if col > col_max:
-# 				col_max = col
+def write_eigenimages_individual(imagespace, klimit, filename):
+	for z in xrange(0, klimit):
+		row = imagespace[z]
+		height, width = row.shape
+		eigenimage = [0 for i in xrange(width)]
+		col_max = -999999
+		col_min = 999999
+		for i in range(width):
+			col = row[0, i]
+			eigenimage[i] = col
+			if col < col_min:
+				col_min = col
+			if col > col_max:
+				col_max = col
 
-# 		col_shift = col_min * -1
-# 		col_range = col_max - col_min
-# 		col_scale = 255 / col_range
-# 		for i in xrange(0, width):
-# 			eigenimage[i] += col_shift
-# 			eigenimage[i] = int(round(eigenimage[i] * col_scale))
-# 		write_image_to_file(eigenimage, filename+"_k-"+str(z)+".png")
+		col_shift = col_min * -1
+		col_range = col_max - col_min
+		col_scale = 255 / col_range
+		for i in xrange(0, width):
+			eigenimage[i] += col_shift
+			eigenimage[i] = int(round(eigenimage[i] * col_scale))
+		write_image_to_file(eigenimage, filename+"_k-"+str(z)+".png")
 
 
 def write_eigenimage(imagespace, klimit, filename_postfix='0'):
@@ -190,7 +191,7 @@ def write_eigenimage(imagespace, klimit, filename_postfix='0'):
 		eigenimage[i] += col_shift
 		eigenimage[i] = int(round(eigenimage[i] * col_scale))
 
-	write_image_to_file(eigenimage, "./out/_TEST_"+filename_postfix+".png")
+	write_image_to_file(eigenimage, "./out/_EIMGS_"+filename_postfix+".png")
 
 
 def generate_weights(imagespace, klimit):
@@ -328,6 +329,13 @@ def create_eigenimage(source_directory):
 		character_weights["characters"] = characters
 		character_weights["weights"] = weights
 		pickle.dump(character_weights, open(charweight_pickle, "wb"))
+
+	if DEBUG_PRINT_EIGENIMAGES:
+		write_eigenimages_individual(image_space, k_limit, "./out/_EIMG")
+		write_eigenimage(image_space, 4, "04")
+		write_eigenimage(image_space, 8, "08")
+		write_eigenimage(image_space, 16, "16")
+		write_eigenimage(image_space, 32, "32")
 
 	if DEBUG_TEST_EIGENSPACE:
 		print "Generating check images"
