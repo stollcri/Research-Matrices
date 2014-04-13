@@ -129,11 +129,11 @@ def create_eigenspace(eigen_images):
 
 	klimit = get_k_limit(s)
 	imagespace = imagespace[:klimit]
-
-	s_len = s.shape[0]
-	for k in xrange(0, s_len):
-		if k >= klimit:
-			s[k] = 0
+	# s_len = s.shape[0]
+	# for k in xrange(0, s_len):
+	# 	if k >= klimit:
+	# 		s[k] = 0
+	s = s[:klimit]
 
 	return imagespace, klimit, s
 
