@@ -46,7 +46,8 @@ def add_to_matrix_from_file(filename):
 	# EXPERIMENTS: how does changing the thumbnail size impact OCR
 	# ~~~~~ MUST BE HARMONIZED WITH ocr-eig.py ~~~~~
 	#
-	png_image.thumbnail((16, 16), Image.ANTIALIAS)
+	image_size_final = 16
+	png_image.thumbnail((image_size_final, image_size_final), Image.ANTIALIAS)
 
 	col = 0
 	image = []
