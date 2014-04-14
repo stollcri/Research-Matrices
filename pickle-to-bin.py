@@ -71,7 +71,7 @@ def characters_pickle_to_binary(infile, outfile):
 
 if __name__ == "__main__":
 	try:
-		eigenspace_pickle_to_binary("./out/eigenspace.p", "./out/eigenspace.bin")
-		characters_pickle_to_binary("./out/characters.p", "./out/characters.bin")
+		eigenspace_pickle_to_binary("./out/eigenspace.p", "./out/eigenspace")
+		characters_pickle_to_binary("./out/characters.p", "./out/characters")
 	except KeyboardInterrupt:
 		exit(0)
