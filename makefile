@@ -141,6 +141,7 @@ ${train_set_p}: tsp-%:
 .PHONY: eispace
 eispace:
 	./eigenimage.py ./img/train-png/
+	./pickle-to-bin.py
 
 
 .PHONY: test
