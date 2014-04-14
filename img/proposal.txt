@@ -1,0 +1,21 @@
+OCR with PCA using SVD
+
+The goal of this project will be to perform Optical Character Recognition (OCR)
+with Principal Component Analysis (PCA) by using Singular Value Decomposition
+(SVD). In the field of computer vision this approach has been used for facial recognition
+and is known as the eigenface technique. OCR is often seen as a solved problem, cur-
+rent commercial systems can perform OCR with high rates of accuracy, however with
+this project we will seek to formulate the problem in a way which will allow for more flex-
+ible or abstract applications.
+
+The first major component of this project will be generating training data and
+training the algorithm. The training data will be generated from the fonts loaded on the
+developers computer. Using this approach allows for the domain of known characters to
+easily be extended by simply loading more fonts. For every non-cursive, latin font (at
+least 128 total) a 16 pixel by 16 pixel training image will be generated for each upper-
+case letter (26 total), lower-case letter (26 total), number (10 total), and select special
+characters (11 total). The resulting 9344x256 matrix will be centered and normalized by
+subtracting the mean image, then SVD will be performed on its covariance matrix. This
+will give us our eigen-image-space. Mean images will be created for each character
+from the 128 training examples, and those images will be projected onto the eigen-im-
+age-space. The resulting weights for each letter will be stored.
