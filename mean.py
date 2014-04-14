@@ -65,6 +65,11 @@ def center_eigen(eigen_images):
 	for i in xrange(len(eigen_means)):
 		eigen_means[i] = eigen_means[i] / image_count
 
+		# if eigen_means[i] < 64:
+		# 	eigen_means[i] -= eigen_means[i] * .25
+		# elif eigen_means[i] > 64:
+		# 	eigen_means[i] += eigen_means[i] * .25
+
 	return eigen_means
 
 
