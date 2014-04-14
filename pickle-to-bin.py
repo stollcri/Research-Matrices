@@ -12,10 +12,12 @@ def eigenspace_pickle_to_binary(infile, outfile):
 		eigenspace = pickle.load(open(infile, "rb"))
 		k_limit = eigenspace["k_limit"]
 		image_space = eigenspace["image_space"]
+		eigen_means = eigenspace["eigen_means"]
 		eigen_values = eigenspace["eigen_values"]
 		print " k_limit", k_limit
 		print " dimensions", image_space.shape[1]
 		print " image_space", image_space.shape
+		print " eigen_means", len(eigen_means)
 		print " eigen_values", eigen_values.shape
 
 		print "Writing values to binary", outfile
@@ -32,7 +34,12 @@ def eigenspace_pickle_to_binary(infile, outfile):
 					# print image_space[i, j]
 					f.write(struct.pack('d', image_space[i, j]))
 			print " image_space", k_limit, "x", image_space.shape[1], "(as doubles)"
-				
+			
+			for i in xrange(0, len(eigen_means)):
+				# print eigen_means[i]
+				f.write(struct.pack('d', eigen_means[i]))
+			print " eigen_means", k_limit, "(as doubles)"
+
 			for i in xrange(0, k_limit):
 				# print eigen_values[i]
 				f.write(struct.pack('d', eigen_values[i]))

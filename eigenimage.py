@@ -194,7 +194,7 @@ def write_eigenimage(imagespace, klimit, filename_postfix='0'):
 	write_image_to_file(eigenimage, "./out/_EIMGS_"+filename_postfix+".png")
 
 
-def generate_weights(imagespace, klimit):
+def generate_weights(imagespace, klimit, eigen_means):
 	character_list = [ "./img/means/001_n.png", "./img/means/002_n.png", "./img/means/003_n.png", "./img/means/004_n.png", "./img/means/005_n.png", "./img/means/006_n.png", "./img/means/007_n.png", "./img/means/008_n.png", "./img/means/009_n.png", "./img/means/010_n.png", "./img/means/011_n.png", "./img/means/0_n.png", "./img/means/1_n.png", "./img/means/2_n.png", "./img/means/3_n.png", "./img/means/4_n.png", "./img/means/5_n.png", "./img/means/6_n.png", "./img/means/7_n.png", "./img/means/8_n.png", "./img/means/9_n.png", "./img/means/A_u.png", "./img/means/B_u.png", "./img/means/C_u.png", "./img/means/D_u.png", "./img/means/E_u.png", "./img/means/F_u.png", "./img/means/G_u.png", "./img/means/H_u.png", "./img/means/I_u.png", "./img/means/J_u.png", "./img/means/K_u.png", "./img/means/L_u.png", "./img/means/M_u.png", "./img/means/N_u.png", "./img/means/O_u.png", "./img/means/P_u.png", "./img/means/Q_u.png", "./img/means/R_u.png", "./img/means/S_u.png", "./img/means/T_u.png", "./img/means/U_u.png", "./img/means/V_u.png", "./img/means/W_u.png", "./img/means/X_u.png", "./img/means/Y_u.png", "./img/means/Z_u.png", "./img/means/a_l.png", "./img/means/b_l.png", "./img/means/c_l.png", "./img/means/d_l.png", "./img/means/e_l.png", "./img/means/f_l.png", "./img/means/g_l.png", "./img/means/h_l.png", "./img/means/i_l.png", "./img/means/j_l.png", "./img/means/k_l.png", "./img/means/l_l.png", "./img/means/m_l.png", "./img/means/n_l.png", "./img/means/o_l.png", "./img/means/p_l.png", "./img/means/q_l.png", "./img/means/r_l.png", "./img/means/s_l.png", "./img/means/t_l.png", "./img/means/u_l.png", "./img/means/v_l.png", "./img/means/w_l.png", "./img/means/x_l.png", "./img/means/y_l.png", "./img/means/z_l.png"]
 	characters = []
 	weights = []
@@ -235,13 +235,18 @@ def generate_weights(imagespace, klimit):
 			letter = '/'
 		characters.append(letter)
 
-		new_weight = generate_weight(imagespace, klimit, character)
+		new_weight = generate_weight(imagespace, klimit, character, eigen_means)
 		weights.append(new_weight)
 	return characters, weights
 
 
-def generate_weight(imagespace, klimit, test_img_name):
+def generate_weight(imagespace, klimit, test_img_name, eigen_means):
 	test_img = add_to_matrix_from_file(test_img_name)
+
+	# # subtract the imagespace mean
+	# for index, value in enumerate(test_img):
+	# 	test_img[index] = test_img[index] - eigen_means[index]
+
 	test_array = numpy.array(test_img)
 	weights = []
 	for x in xrange(0, klimit):
@@ -334,7 +339,7 @@ def create_eigenimage(source_directory):
 		weights = character_weights["weights"]
 	else:
 		print "No cache, generating all character weights"
-		characters, weights = generate_weights(image_space, k_limit)
+		characters, weights = generate_weights(image_space, k_limit, eigen_means)
 		character_weights = {}
 		character_weights["characters"] = characters
 		character_weights["weights"] = weights

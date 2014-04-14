@@ -330,6 +330,11 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	if DEBUG_LOCATIONS: print show_time(), "> test_knowledge"
 	test_array = numpy.array(question)
 	question_weights = []
+
+	# # subtract the imagespace mean
+	# for index, value in enumerate(test_array):
+	# 	test_array[index] = test_array[index] - eigen_means[index]
+
 	# get the weights for the unseeen image by projecting it down to eigenimagespace
 	for x in xrange(0, klimit):
 		eigen_vector = imagespace[x].transpose()
