@@ -18,7 +18,7 @@ def eigenspace_pickle_to_binary(infile, outfile):
 		print " image_space", image_space.shape
 		print " eigen_values", eigen_values.shape
 
-		print "Writing values to binary", infile
+		print "Writing values to binary", outfile
 		with open(outfile, 'wb') as f:
 			#f.write(struct.pack('f', float(k_limit))) # single-precision floating point number
 			#f.write(struct.pack('d', float(k_limit))) # double-precision floating point number
@@ -51,7 +51,7 @@ def characters_pickle_to_binary(infile, outfile):
 		print " characters", len(characters)
 		print " weights", len(weights)
 		
-		print "Writing values to binary", infile
+		print "Writing values to binary", outfile
 		with open(outfile, 'wb') as f:
 			f.write(struct.pack('i', int(len(characters))))
 			print " count", len(characters), "(as int)"
