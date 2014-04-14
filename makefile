@@ -92,7 +92,7 @@ trainingset-number:
 	@echo $@ complete
 
 trainingset-punctuation:
-	@for letter in . , ? \! - _ \# @ \; \' \" ; do \
+	@for letter in . , ? \! - _ \# @ \; \' \" \( \) \$ % /; do \
 		mkdir -p ./img/train-png ; \
 		./gen-train.py $$letter ./img/train-png ; \
 	done
@@ -131,7 +131,7 @@ train_n: ${train_set_n};
 ${train_set_n}: tsn-%:
 	./mean.py ./out/$i_n.png ./img/train-png/$i_n-*.png
 
-train_set_p := $(foreach i,001 002 003 004 005 006 007 008 009 010 011,tsp-$i)
+train_set_p := $(foreach i,001 002 003 004 005 006 007 008 009 010 011 012 013 014 015 016,tsp-$i)
 train_p: ${train_set_p};
 .PHONY: ${train_set_p}
 ${train_set_p}: tsp-%:

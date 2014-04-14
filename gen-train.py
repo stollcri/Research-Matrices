@@ -68,6 +68,16 @@ def gen_filename(outputdirectory, character_in, index):
 		character = '010'
 	elif character_in == '"':
 		character = '011'
+	elif character_in == '(':
+		character = '012'
+	elif character_in == ')':
+		character = '013'
+	elif character_in == '$':
+		character = '014'
+	elif character_in == '%':
+		character = '015'
+	elif character_in == '/':
+		character = '016'
 	else:
 		character = character_in
 

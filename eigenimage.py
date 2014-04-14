@@ -223,6 +223,16 @@ def generate_weights(imagespace, klimit):
 			letter = '\''
 		elif letter == '011':
 			letter = '"'
+		elif letter == '012':
+			letter = '('
+		elif letter == '013':
+			letter = ')'
+		elif letter == '014':
+			letter = '$'
+		elif letter == '015':
+			letter = '%'
+		elif letter == '016':
+			letter = '/'
 		characters.append(letter)
 
 		new_weight = generate_weight(imagespace, klimit, character)
