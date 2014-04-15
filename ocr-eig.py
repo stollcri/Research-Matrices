@@ -82,6 +82,7 @@ def find_characters(image_matrix, depth):
 	threshhold = 192
 	characters = []
 
+	spacing = 0
 	text_rows = []
 	blank_row = True
 	for row_index, row in enumerate(image_matrix):
@@ -98,7 +99,7 @@ def find_characters(image_matrix, depth):
 			blank_row = True
 		else:
 			if len(text_rows):
-				results = split_characters(text_rows, threshhold, row_index)
+				results, spacing = split_characters(text_rows, threshhold, row_index, spacing)
 				for result in results:
 					characters.append(result)
 				characters.append('\n')
@@ -107,15 +108,17 @@ def find_characters(image_matrix, depth):
 	return characters
 
 
-def split_characters(text_row, threshhold, row_index):
+def split_characters(text_row, threshhold, row_index, space_width=0):
 	row_count = len(text_row)
 	column_count = len(text_row[0])
-	space_width = 2 + int(round(column_count * .005))
+	if not space_width:
+		space_width = 2 + int(round(column_count * .005))
 	characters = []
 
 	text_cols = []
 	blank_col = True
 	space_cols = 0
+	pixel_cols = 0
 	for col in xrange(0, column_count):
 		pixel_col = []
 
@@ -133,16 +136,21 @@ def split_characters(text_row, threshhold, row_index):
 			text_cols.append(pixel_col)
 			blank_col = True
 			space_cols = 0
+			pixel_cols += 1
 			
 		else:
+			if pixel_cols > 2:
+				space_width = int(round((space_width + (pixel_cols / 3)) / 2)) + 1
+				# print pixel_cols, space_width
 			space_cols += 1
+			pixel_cols = 0
 			if len(text_cols):
 				filename = "./out/img_" + str(row_index) + "-" + str(col) + ".png"
 				results = size_character(transpose_image(text_cols), filename)
 				characters.append(results)
 				text_cols = []
 
-	return characters
+	return characters, space_width
 
 
 def transpose_image(image_matrix):
