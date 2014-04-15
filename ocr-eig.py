@@ -329,6 +329,7 @@ def write_question_image_projected(weights, imagespace, eigen_values, klimit, cu
 def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, characters, weights, lastchar, curchar):
 	if DEBUG_LOCATIONS: print show_time(), "> test_knowledge"
 	test_array = numpy.array(question)
+	k_limit = int(klimit / 4)
 	question_weights = []
 
 	# # subtract the imagespace mean
@@ -336,7 +337,7 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	# 	test_array[index] = test_array[index] - eigen_means[index]
 
 	# get the weights for the unseeen image by projecting it down to eigenimagespace
-	for x in xrange(0, klimit):
+	for x in xrange(0, k_limit):
 		eigen_vector = imagespace[x].transpose()
 		question_weights.append(numpy.dot(test_array, eigen_vector)[0,0])
 
@@ -357,7 +358,7 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 			denominatorA = 0
 			denominatorB = 0
 			# for index, feature in enumerate(weight_vector):
-			for index in xrange(0, klimit/8):
+			for index in xrange(0, k_limit):
 				numerator += question_weights[index] * weight_vector[index]
 				denominatorA += question_weights[index] * question_weights[index]
 				denominatorB += weight_vector[index] * weight_vector[index]
