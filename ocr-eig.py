@@ -343,12 +343,14 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 	if DEBUG_PRINT_EIGS: write_question_image_projected(question_weights, imagespace, eigen_values, klimit, curchar)
 
 	# Cosine similarity
-	scores = []
+	# scores = []
+	max_score = -999999
+	answer = ''
 	for idx, weight_vector in enumerate(weights):
 		doloop = True
-		if lastchar.islower():
-			if characters[idx].isupper():
-				doloop = False
+		# if lastchar.islower():
+		# 	if characters[idx].isupper():
+		# 		doloop = False
 
 		if doloop:
 			numerator = 0
@@ -366,18 +368,23 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 		else:
 			total_score = 0
 		
-		scores.append(total_score)
+		if total_score > max_score:
+			max_score = total_score
+			answer = characters[idx]
+		# scores.append(total_score)
+	#
+	# TODO: merge above and below loop
+	# 
+	# max_score = -999999
+	# max_score_spot = -1
+	# for index, score in enumerate(scores):
+	# 	if DEBUG_VALUES: print characters[index], score, '\t', max_score
+	# 	if score > max_score:
+	# 		max_score = score
+	# 		max_score_spot = index
+	# if DEBUG_VALUES: print characters[max_score_spot], max_score
 
-	max_score = -999999
-	max_score_spot = -1
-	for index, score in enumerate(scores):
-		if DEBUG_VALUES: print characters[index], score, '\t', max_score
-		if score > max_score:
-			max_score = score
-			max_score_spot = index
-	if DEBUG_VALUES: print characters[max_score_spot], max_score
-
-	answer = characters[max_score_spot]
+	# answer = characters[max_score_spot]
 	if DEBUG_LOCATIONS: print show_time(), "< test_knowledge"
 	return answer, max_score
 
