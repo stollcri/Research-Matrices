@@ -192,7 +192,7 @@ def size_character(eigen_image, target_file):
 		scale_w = image_size_work / float(max(width, height) * 1.4)
 		scale_h = image_size_work / float(max(width, height) * 2.8)
 	elif width < 4:
-		scale_w = image_size_work / float(max(width, height) * 1.6)
+		scale_w = image_size_work / float(max(width, height) * 1.2)
 		scale_h = image_size_work / float(max(width, height))
 	elif width < 6:
 		scale_w = image_size_work / float(max(width, height) * .8)
