@@ -375,6 +375,7 @@ def test_knowledge(question, klimit, imagespace, eigen_means, eigen_values, char
 		else:
 			total_score = 0
 		
+		# print idx, characters[idx], weight_vector[index], total_score, max_score
 		if total_score > max_score:
 			max_score = total_score
 			answer = characters[idx]

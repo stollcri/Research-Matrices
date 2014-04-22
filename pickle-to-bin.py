@@ -69,9 +69,10 @@ def characters_pickle_to_binary(infile, outfile):
 			print " characters", len(characters), "(as chars)"
 
 			for i in xrange(0, len(weights)):
-				# print weights[0][i]
-				f.write(struct.pack('d', weights[0][i]))
-			print " weights", len(weights), "(as doubles)"
+				for j in xrange(0, len(weights[0])):
+					print i, j, ((i+1)*(j+1)), weights[i][j]
+					f.write(struct.pack('d', weights[i][j]))
+			print " weights", (len(weights)*len(weights[0])), "(as doubles)"
 
 		print
 
